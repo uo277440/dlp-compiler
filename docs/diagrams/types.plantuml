@@ -12,6 +12,10 @@ interface Type
 ASTNode <|-- Type
 
 class IntType
+class FuncType{
+params: VarDefinition;
+returnType: Type;
+}
 
 Type <|.. IntType
 

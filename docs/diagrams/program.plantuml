@@ -10,6 +10,18 @@ interface ASTNode {
 
 class Program
 
+interface Definition{
+type: Type
+}
+class FunctionDefinition{
+    name: String
+    varDefinitions: VarDefinition
+    statements: Statement
+}
+class VarDefinition{
+name:String
+}
+
 ASTNode <|.. Program
 
 @enduml
