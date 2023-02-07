@@ -23,5 +23,9 @@ name:String
 }
 
 ASTNode <|.. Program
+ASTNode <|.. Definition
+Definition <|.. VarDefinition
+Definition <|.. FunctionDefinition
+Program o-- "0..n" Definition
 
 @enduml

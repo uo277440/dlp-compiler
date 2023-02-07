@@ -6,17 +6,34 @@ interface ASTNode {
     getLine(): int
     getColumn(): int
 }
+class ArrayType{
+    size: int
+}
+class StructType {
+    fields: List<StructField>
+}
+class StructField{
+name: String
+type: Type
+}
 
 interface Type
 
 ASTNode <|-- Type
 
 class IntType
+class CharType
+class DoubleType
 class FuncType{
 params: VarDefinition;
 returnType: Type;
 }
 
 Type <|.. IntType
+Type <|.. CharType
+Type <|.. DoubleType
+Type <|.. FuncType
+Type <|.. StructType
+Type <|.. ArrayType
 
 @enduml

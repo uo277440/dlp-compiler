@@ -18,12 +18,7 @@ class IntLiteral {
 class DoubleLiteral {
     value: double
 }
-class Array {
-    size: int
-}
-class Struct {
-    Array<Variable>: variables
-}
+
 class Variable{
     name: String
     definition: Definition
@@ -33,16 +28,36 @@ class ArithmeticOperation{
     leftExpression: Expression
     rightExpression: Expression
 }
+class LogicOperation{
+    op: String
+    leftExpression: Expression
+    rightExpression: Expression
+}
+class ComparisonOperation{
+    op: String
+    leftExpression: Expression
+    rightExpression: Expression
+}
 class Invocation{
     arguments: List<Expression>
 }
+class Indexing{
+
+}
+class FieldAccess{
+
+}
 ASTNode <|-- Expression
 Expression <|.. IntLiteral
+Expression <|.. Invocation
 Expression <|.. DoubleLiteral
-Expression <|.. Array
 Expression <|.. Variable
-Expression <|.. Struct
 Expression <|.. ArithmeticOperation
+Expression <|.. Indexing
+Expression <|.. FieldAccess
+Expression <|.. ComparisonOperation
 ArithmeticOperation o-- "2" Expression
+Expression <|.. LogicOperation
+LogicOperation o-- "2" Expression
 
 @enduml

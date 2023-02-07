@@ -20,21 +20,31 @@ class While {
     whileBody: List<Statement>
 }
 class Write {
-    whileBody: List<Expression>
+    body: List<Expression>
 }
 class Return {
 expression : Expression
 }
-class Comment{
-comment: String
+class Invocation{
+    arguments: List<Expression>
 }
+
 
 
 ASTNode <|-- Statement
 Statement <|.. If
+Statement <|.. Invocation
+Statement <|.. Write
+Statement <|.. While
+Statement <|.. Return
 
 If o-- "1" Expression
 If o-- "0..n" Statement
+While o-- "1" Expression
+While o-- "0..n" Statement
+Write o-- "0..n" Expression
+Invocation o-- "1..n" Expression
+Return o-- "1" Expression
 
 
 @enduml
