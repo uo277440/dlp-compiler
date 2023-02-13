@@ -21,9 +21,15 @@ interface Type
 
 ASTNode <|-- Type
 
-class IntType
-class CharType
-class DoubleType
+class IntType{
+value: int
+}
+class CharType{
+    value: char
+        }
+class DoubleType{
+         value: double
+      }
 class FuncType{
 params: VarDefinition;
 returnType: Type;

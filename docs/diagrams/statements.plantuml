@@ -15,6 +15,14 @@ class If {
     ifBody: List<Statement>
     elseBody: List<Statement>
 }
+class Assignation {
+    leftA: Variable
+    rightA: Expression
+
+}
+class Read{
+toRead: String
+}
 class While {
     condition: Expression
     whileBody: List<Statement>
@@ -37,8 +45,11 @@ Statement <|.. Invocation
 Statement <|.. Write
 Statement <|.. While
 Statement <|.. Return
+Statement <|.. Assignation
+Statement <|.. Read
 
 If o-- "1" Expression
+Assignation o-- "1" Expression
 If o-- "0..n" Statement
 While o-- "1" Expression
 While o-- "0..n" Statement

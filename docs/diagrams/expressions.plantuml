@@ -42,16 +42,33 @@ class Invocation{
     arguments: List<Expression>
 }
 class Indexing{
-
+expression:Expression
 }
 class FieldAccess{
-
+leftF : Expression
+rightF: String
+}
+class Unary{
+expression:Expression
+}
+class UnaryMinus{
+expression:Expression
+}
+class Not{
+expression:Expression
+}
+class Cast{
+type: Type
 }
 ASTNode <|-- Expression
 Expression <|.. IntLiteral
 Expression <|.. Invocation
 Expression <|.. DoubleLiteral
 Expression <|.. Variable
+Expression <|.. Unary
+Expression <|.. Not
+Expression <|.. Cast
+Expression <|.. UnaryMinus
 Expression <|.. ArithmeticOperation
 Expression <|.. Indexing
 Expression <|.. FieldAccess
