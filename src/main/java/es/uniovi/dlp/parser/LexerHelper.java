@@ -10,11 +10,27 @@ public class LexerHelper {
     return -1;
   }
 
-  public static double lexemeToReal(String lexeme) {
-    return -1;
-  }
 
   public static char lexemeToChar(String lexeme) {
-    return Character.MIN_VALUE;
+
+      if (lexeme.toCharArray()[1] == '\\' && lexeme.toCharArray()[2] == 'n')
+        return '\n';
+      else if (lexeme.toCharArray()[1] == '\\' && lexeme.toCharArray()[2] == 't')
+        return '\t';
+      else if(lexeme.toCharArray()[1] != '\\')
+        return lexeme.toCharArray()[1];
+      //falta para el ASCII
+      return '.';
+
   }
-}
+
+  public static double lexemeToReal(String lexeme) {
+    try {
+      return Double.parseDouble(lexeme);
+    }
+    catch(NumberFormatException e) {
+      e.printStackTrace();
+    }
+    return -1;
+  }
+  }
