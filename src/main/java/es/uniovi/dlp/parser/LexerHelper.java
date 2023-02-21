@@ -11,12 +11,12 @@ public class LexerHelper {
   }
 
   public static char lexemeToChar(String lexeme) {
-
     if (lexeme.toCharArray()[1] == '\\' && lexeme.toCharArray()[2] == 'n') return '\n';
     else if (lexeme.toCharArray()[1] == '\\' && lexeme.toCharArray()[2] == 't') return '\t';
+    else if (lexeme.toCharArray()[1] == '\\' && lexeme.toCharArray()[2] == 'r') return '\r';
     else if (lexeme.toCharArray()[1] != '\\') return lexeme.toCharArray()[1];
     // falta para el ASCII
-    return (char) ('\\' + (char) Integer.parseInt(lexeme.substring(2, lexeme.length() - 2)));
+    return (char) (Integer.parseInt(lexeme.substring(2, lexeme.length() - 1)));
   }
 
   public static double lexemeToReal(String lexeme) {
