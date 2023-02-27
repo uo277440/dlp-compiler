@@ -62,7 +62,7 @@ public class LexerTest {
         fail("Reached End Of File when expecting a new token");
       }
 
-              expectedToken.assertIsEqual(token);
+      expectedToken.assertIsEqual(token);
     }
 
     if (lexer.nextToken().getType() != XanaLexer.EOF) {
