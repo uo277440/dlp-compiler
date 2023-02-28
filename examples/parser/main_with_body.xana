@@ -1,5 +1,6 @@
 def main() do
     a :: int
+    b::char
 
     b::char
 
