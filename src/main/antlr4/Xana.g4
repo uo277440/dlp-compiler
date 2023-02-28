@@ -5,18 +5,42 @@ grammar Xana;
 package es.uniovi.dlp.parser;
 }
 
-program: (INT_CONSTANT | ID | REAL_CONSTANT | CHAR_CONSTANT)*
+program: (var_definition | func_definition)*main_func
        ;
-
-MULTI_COMMENT: '"""'.*?'"""' -> skip;
+arithmetic_operation: (ID | invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT ) (arithmetic_operator (ID | invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT ))+;
+expression:  (field_acces | arithmetic_operation |logic_operattion|comparison_operation|cast|INT_CONSTANT| DIGIT | ID | CHARACTER | REAL_CONSTANT | invocation | CHAR_CONSTANT | oposite_operation | ')' | '(' | LOGIC_OPERATOR | arithmetic_operator | atributte_access)+;
+arithmetic_operator:'+'|'-'|'/'|'*'|'^'|'%';
+main_func:'def'MAIN'('')' 'do' (var_definition)*(statement)*'end';
+field_acces:(ID | atributte_access | invocation)('['(cast | arithmetic_operation | DIGIT | INT_CONSTANT | atributte_access | field_acces | ID |invocation)']')+;
+var_definition: ((ID (',' ID)* '::' type));
+type: simple_type | complex_type ;
+func_definition:'def' ID '('((param (',' param)* ')') | ')')  '::' (simple_type | 'void') func_body;
+param: ID '::' simple_type;
+func_body:'do'(var_definition)*(statement)*'end';
+simple_type: 'char' | 'double' | 'int';
+complex_type:array | struct;
+struct:'defstruct' 'do'  (var_definition)* 'end';
+comparison_operation: (ID | INT_CONSTANT | DIGIT)LOGIC_OPERATOR(ID | INT_CONSTANT | DIGIT);
+logic_operattion: (invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT | ID) (LOGIC_OPERATOR (invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT | ID))+;
+assignation: (expression | '('expression')') '=' (expression | '('expression')');
+write:'puts'(expression)(',' expression)*;
+read:'in'(expression)(',' expression)*;
+statement: while | if | assignation | read | write | return | invocation;
+if: 'if' expression 'do' (statement)* ('else' (statement)*)? 'end';
+while: 'while' expression+ 'do' (statement)* 'end';
+return:'return'expression;
+cast:(CHAR_CONSTANT | ID | arithmetic_operation | field_acces | atributte_access | REAL_CONSTANT | DIGIT | INT_CONSTANT)'as'type;
+oposite_operation:'!'expression+;
+atributte_access:ID'.'ID;
+invocation:ID(('('expression (',' expression)*')') | ('('')'));
+array:('[' (DIGIT | INT_CONSTANT) '::')+ (type ']');
+MAIN: 'main';
 
 ONE_COMMENT: '#' ~[\r\n]* -> skip;
+
 WS: [ \t\r\n] -> skip;
 
-
-INT_CONSTANT: [0-9]+ ;
-
-ID: ([a-zA-Z] | '_') ('_' | [a-zA-Z] | [0-9])*;
+DIGIT:[1-9][0-9]*;
 
 CHAR_CONSTANT: '\''(('\\'[0-9][0-9][0-9]) | ('\\n' | '\\t' | '\\r') | (.)) '\'';
 
@@ -24,28 +48,15 @@ MANTISA: [Ee] [+-]? [1-9] [0-9]*;
 
 CHARACTER: '\''[a-zA-Z]'\'';
 
-LOGIC_OPERATOR: '>' | '<' | '!=' | '==';
+LOGIC_OPERATOR: '>' | '<' | '!=' | '==' | '<=' | '>=' | '&&' | '||';
 
-DIGIT:[0-9]+;
 
 REAL_CONSTANT: ([1-9]+ [0-9]* MANTISA?) | ([1-9][0-9]*'.'[0-9]*MANTISA?) | ('.'[1-9][0-9]*MANTISA?) ;
 
-var_definition: ID (',' ID)* '::' type '\\n';
+MULTI_COMMENT: '"""'.*?'"""' -> skip;
 
-type: simple_type | array | struct; //parche para que compile
+ID: ([a-zA-Z] | '_') ('_' | [a-zA-Z] | [0-9])*;
 
-definition:'def' ID '(' param? (',' param)* ')' '::' type;
-simple_type: 'char' | 'double' | 'int';
-array:ID '::' ('[' INT_CONSTANT '::')+ (type ']');
-struct:ID ':: defstruct do \\n' (var_definition '\\n')* 'end';
-expression:DIGIT | ID | CHARACTER;
-assignation: expression '=' expression;
-write:'puts'(expression)(',' expression)*;
-read:'in'(expression)(',' expression)*;
-statement: '1';
-param: '1';
-if: 'if' expression LOGIC_OPERATOR expression 'do' (statement)* ('else' (statement)*)? 'end';
-while: 'while' expression LOGIC_OPERATOR expression 'do' (statement)* 'end';
-return:'return'expression;
-cast:'as'type;
+INT_CONSTANT: [0-9]+[0-9]* ;
+
 
