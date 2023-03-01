@@ -29,7 +29,8 @@ expression returns [Expression ast]
     | expression ('>' | '<' | '!=' | '==' | '<=' | '>=' | '&&' | '||') expression
     |expression ('+'|'-'|'/'|'*'|'^'|'%') expression
     |expression'.'expression
-    | '-'expression;
+    | '-'expression
+    ;
 
 
 main_func returns [FunctionDefinition ast]
@@ -77,37 +78,51 @@ struct returns [Struct ast]
 
 assignation: (expression | '('expression')') '=' (expression | '('expression')');
 
-write:'puts'(expression)(',' expression)*;
+write returns [Write ast]
+:PUTS(expression)(',' expression)*{$ast = new Write($PUTS.getLine(),$PUTS.getCharPositionInLine() + 1);};
 
-read:'in'(expression)(',' expression)*;
+read returns [Read ast]
+:IN (expression)(',' expression)* {$ast = new Read($IN.getLine(),$IN.getCharPositionInLine() + 1);};
 
 statement returns [List<Statement> ast= new ArrayList<>()]
-: while
+:   while
     | if
     | assignation
     | read
     | write
     | return
-    | invocation;
+    | invocation
+    ;
+
 
 if returns [If ast]
-: 'if' expression DO (statement)* ('else' (statement)*)? END;
+: IF expression DO (statement)* ('else' (statement)*)? END {$ast = new If($IF.getLine(),$IF.getCharPositionInLine() + 1);};
 
 while returns [While ast]
-: 'while' expression+ DO (statement)* END;
+: WHILE expression+ DO (statement)* END{$ast = new While($WHILE.getLine(),$WHILE.getCharPositionInLine() + 1);};
 
 return returns [Return ast]
-:'return'expression;
+:RETURN expression {$ast = new Return($RETURN.getLine(),$RETURN.getCharPositionInLine() + 1);};
 
 //cast:(CHAR_CONSTANT | ID | arithmetic_operation | field_acces | atributte_access | REAL_CONSTANT | DIGIT | INT_CONSTANT)'as'simple_type;
 
 //atributte_access:ID'.'ID;
 
 invocation returns [Invocation ast]
-:ID(('('expression (',' expression)*')') | ('('')'));
+:ID(('('expression (',' expression)*')') | ('('')')) {$ast = new Invocation($ID.getLine(),$ID.getCharPositionInLine() + 1);};
 
 array returns [Array ast]
 : ('[' INT_CONSTANT '::') (array)* (type ']') {$ast = new Array($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1);};
+
+PUTS: 'puts';
+
+IN: 'in';
+
+IF: 'if';
+
+WHILE: 'while';
+
+RETURN: 'return';
 
 MAIN: 'main';
 

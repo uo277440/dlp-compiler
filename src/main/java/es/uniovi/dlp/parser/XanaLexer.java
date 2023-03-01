@@ -28,10 +28,10 @@ public class XanaLexer extends Lexer {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
-		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		MAIN=32, DEF=33, DO=34, END=35, CHAR=36, DOUBLE=37, INT=38, DEFSTRUCT=39, 
-		INT_CONSTANT=40, ONE_COMMENT=41, WS=42, CHAR_CONSTANT=43, MANTISA=44, 
-		CHARACTER=45, REAL_CONSTANT=46, MULTI_COMMENT=47, ID=48;
+		T__24=25, T__25=26, T__26=27, T__27=28, IF=29, WHILE=30, RETURN=31, MAIN=32, 
+		DEF=33, DO=34, END=35, CHAR=36, DOUBLE=37, INT=38, DEFSTRUCT=39, INT_CONSTANT=40, 
+		ONE_COMMENT=41, WS=42, CHAR_CONSTANT=43, MANTISA=44, CHARACTER=45, REAL_CONSTANT=46, 
+		MULTI_COMMENT=47, ID=48;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -45,8 +45,8 @@ public class XanaLexer extends Lexer {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
 			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
 			"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
-			"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "MAIN", "DEF", 
-			"DO", "END", "CHAR", "DOUBLE", "INT", "DEFSTRUCT", "INT_CONSTANT", "ONE_COMMENT", 
+			"T__25", "T__26", "T__27", "IF", "WHILE", "RETURN", "MAIN", "DEF", "DO", 
+			"END", "CHAR", "DOUBLE", "INT", "DEFSTRUCT", "INT_CONSTANT", "ONE_COMMENT", 
 			"WS", "CHAR_CONSTANT", "MANTISA", "CHARACTER", "REAL_CONSTANT", "MULTI_COMMENT", 
 			"ID"
 		};
@@ -57,9 +57,9 @@ public class XanaLexer extends Lexer {
 		return new String[] {
 			null, "'['", "']'", "'as'", "'!'", "'('", "')'", "'>'", "'<'", "'!='", 
 			"'=='", "'<='", "'>='", "'&&'", "'||'", "'+'", "'-'", "'/'", "'*'", "'^'", 
-			"'%'", "'.'", "','", "'::'", "'void'", "'='", "'puts'", "'in'", "'if'", 
-			"'else'", "'while'", "'return'", "'main'", "'def'", "'do'", "'end'", 
-			"'char'", "'double'", "'int'", "'defstruct'"
+			"'%'", "'.'", "','", "'::'", "'void'", "'='", "'puts'", "'in'", "'else'", 
+			"'if'", "'while'", "'return'", "'main'", "'def'", "'do'", "'end'", "'char'", 
+			"'double'", "'int'", "'defstruct'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -67,8 +67,8 @@ public class XanaLexer extends Lexer {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, "MAIN", "DEF", "DO", 
-			"END", "CHAR", "DOUBLE", "INT", "DEFSTRUCT", "INT_CONSTANT", "ONE_COMMENT", 
+			null, null, null, null, null, "IF", "WHILE", "RETURN", "MAIN", "DEF", 
+			"DO", "END", "CHAR", "DOUBLE", "INT", "DEFSTRUCT", "INT_CONSTANT", "ONE_COMMENT", 
 			"WS", "CHAR_CONSTANT", "MANTISA", "CHARACTER", "REAL_CONSTANT", "MULTI_COMMENT", 
 			"ID"
 		};
@@ -157,7 +157,7 @@ public class XanaLexer extends Lexer {
 		"\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0018"+
 		"\u0001\u0018\u0001\u0019\u0001\u0019\u0001\u0019\u0001\u0019\u0001\u0019"+
 		"\u0001\u001a\u0001\u001a\u0001\u001a\u0001\u001b\u0001\u001b\u0001\u001b"+
-		"\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001d"+
+		"\u0001\u001b\u0001\u001b\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001d"+
 		"\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001e"+
 		"\u0001\u001e\u0001\u001e\u0001\u001e\u0001\u001e\u0001\u001e\u0001\u001e"+
 		"\u0001\u001f\u0001\u001f\u0001\u001f\u0001\u001f\u0001\u001f\u0001 \u0001"+
@@ -217,7 +217,7 @@ public class XanaLexer extends Lexer {
 		")\u0090\u0001\u0000\u0000\u0000+\u0092\u0001\u0000\u0000\u0000-\u0094"+
 		"\u0001\u0000\u0000\u0000/\u0097\u0001\u0000\u0000\u00001\u009c\u0001\u0000"+
 		"\u0000\u00003\u009e\u0001\u0000\u0000\u00005\u00a3\u0001\u0000\u0000\u0000"+
-		"7\u00a6\u0001\u0000\u0000\u00009\u00a9\u0001\u0000\u0000\u0000;\u00ae"+
+		"7\u00a6\u0001\u0000\u0000\u00009\u00ab\u0001\u0000\u0000\u0000;\u00ae"+
 		"\u0001\u0000\u0000\u0000=\u00b4\u0001\u0000\u0000\u0000?\u00bb\u0001\u0000"+
 		"\u0000\u0000A\u00c0\u0001\u0000\u0000\u0000C\u00c4\u0001\u0000\u0000\u0000"+
 		"E\u00c7\u0001\u0000\u0000\u0000G\u00cb\u0001\u0000\u0000\u0000I\u00d0"+
@@ -253,18 +253,18 @@ public class XanaLexer extends Lexer {
 		"\u0000\u0000\u009f\u00a0\u0005u\u0000\u0000\u00a0\u00a1\u0005t\u0000\u0000"+
 		"\u00a1\u00a2\u0005s\u0000\u0000\u00a24\u0001\u0000\u0000\u0000\u00a3\u00a4"+
 		"\u0005i\u0000\u0000\u00a4\u00a5\u0005n\u0000\u0000\u00a56\u0001\u0000"+
-		"\u0000\u0000\u00a6\u00a7\u0005i\u0000\u0000\u00a7\u00a8\u0005f\u0000\u0000"+
-		"\u00a88\u0001\u0000\u0000\u0000\u00a9\u00aa\u0005e\u0000\u0000\u00aa\u00ab"+
-		"\u0005l\u0000\u0000\u00ab\u00ac\u0005s\u0000\u0000\u00ac\u00ad\u0005e"+
-		"\u0000\u0000\u00ad:\u0001\u0000\u0000\u0000\u00ae\u00af\u0005w\u0000\u0000"+
-		"\u00af\u00b0\u0005h\u0000\u0000\u00b0\u00b1\u0005i\u0000\u0000\u00b1\u00b2"+
-		"\u0005l\u0000\u0000\u00b2\u00b3\u0005e\u0000\u0000\u00b3<\u0001\u0000"+
-		"\u0000\u0000\u00b4\u00b5\u0005r\u0000\u0000\u00b5\u00b6\u0005e\u0000\u0000"+
-		"\u00b6\u00b7\u0005t\u0000\u0000\u00b7\u00b8\u0005u\u0000\u0000\u00b8\u00b9"+
-		"\u0005r\u0000\u0000\u00b9\u00ba\u0005n\u0000\u0000\u00ba>\u0001\u0000"+
-		"\u0000\u0000\u00bb\u00bc\u0005m\u0000\u0000\u00bc\u00bd\u0005a\u0000\u0000"+
-		"\u00bd\u00be\u0005i\u0000\u0000\u00be\u00bf\u0005n\u0000\u0000\u00bf@"+
-		"\u0001\u0000\u0000\u0000\u00c0\u00c1\u0005d\u0000\u0000\u00c1\u00c2\u0005"+
+		"\u0000\u0000\u00a6\u00a7\u0005e\u0000\u0000\u00a7\u00a8\u0005l\u0000\u0000"+
+		"\u00a8\u00a9\u0005s\u0000\u0000\u00a9\u00aa\u0005e\u0000\u0000\u00aa8"+
+		"\u0001\u0000\u0000\u0000\u00ab\u00ac\u0005i\u0000\u0000\u00ac\u00ad\u0005"+
+		"f\u0000\u0000\u00ad:\u0001\u0000\u0000\u0000\u00ae\u00af\u0005w\u0000"+
+		"\u0000\u00af\u00b0\u0005h\u0000\u0000\u00b0\u00b1\u0005i\u0000\u0000\u00b1"+
+		"\u00b2\u0005l\u0000\u0000\u00b2\u00b3\u0005e\u0000\u0000\u00b3<\u0001"+
+		"\u0000\u0000\u0000\u00b4\u00b5\u0005r\u0000\u0000\u00b5\u00b6\u0005e\u0000"+
+		"\u0000\u00b6\u00b7\u0005t\u0000\u0000\u00b7\u00b8\u0005u\u0000\u0000\u00b8"+
+		"\u00b9\u0005r\u0000\u0000\u00b9\u00ba\u0005n\u0000\u0000\u00ba>\u0001"+
+		"\u0000\u0000\u0000\u00bb\u00bc\u0005m\u0000\u0000\u00bc\u00bd\u0005a\u0000"+
+		"\u0000\u00bd\u00be\u0005i\u0000\u0000\u00be\u00bf\u0005n\u0000\u0000\u00bf"+
+		"@\u0001\u0000\u0000\u0000\u00c0\u00c1\u0005d\u0000\u0000\u00c1\u00c2\u0005"+
 		"e\u0000\u0000\u00c2\u00c3\u0005f\u0000\u0000\u00c3B\u0001\u0000\u0000"+
 		"\u0000\u00c4\u00c5\u0005d\u0000\u0000\u00c5\u00c6\u0005o\u0000\u0000\u00c6"+
 		"D\u0001\u0000\u0000\u0000\u00c7\u00c8\u0005e\u0000\u0000\u00c8\u00c9\u0005"+
