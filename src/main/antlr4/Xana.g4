@@ -3,49 +3,73 @@ grammar Xana;
 
 @header {
 package es.uniovi.dlp.parser;
+import es.uniovi.dlp.ast.*;
+import es.uniovi.dlp.ast.expression.*;
+import es.uniovi.dlp.ast.statement.*;
+import es.uniovi.dlp.ast.program.*;
+import es.uniovi.dlp.ast.type.*;
 
 }
 
-program: (var_definition | func_definition)*main_func
+program returns [Program ast]
+: (var_definition | func_definition)*main_func
        ;
 //arithmetic_operation: (ID | invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT ) (arithmetic_operator (ID | invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT ))+;
 
-expression:  expression('['expression']')+ expression?
+expression returns [Expression ast]
+:  expression('['expression']')+ expression?
     |expression'as'simple_type
-    |INT_CONSTANT
-    | DIGIT
-    | ID
-    | CHARACTER
-    | REAL_CONSTANT
-    | invocation
+    |INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1);}
+    | ID {$ast = new Id($ID.getLine(),$ID.getCharPositionInLine() + 1);}
+    | REAL_CONSTANT {$ast = new RealConstant($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1);}
+    | invocation {$ast = $invocation.ast;}
     | CHAR_CONSTANT
     | '!' expression
     | '('expression')'
     | expression ('>' | '<' | '!=' | '==' | '<=' | '>=' | '&&' | '||') expression
     |expression ('+'|'-'|'/'|'*'|'^'|'%') expression
-    | atributte_access
+    |expression'.'expression
     | '-'expression;
 
 
-main_func:'def'MAIN'('')' 'do' (var_definition)*(statement)*'end';
+main_func returns [FunctionDefinition ast]
+:DEF MAIN'('')' DO (var_definition)*(statement)*END{$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1);};
 
 //field_acces:(ID | atributte_access | invocation)('['(cast | arithmetic_operation | DIGIT | INT_CONSTANT | atributte_access | field_acces | ID |invocation)']')+;
 
-var_definition: ((ID (',' ID)* '::' type));
+var_definition returns[List<VarDefinition> ast=new ArrayList<>()]
+: ((ids+=ID (',' ids+=ID)* '::' type)){
+    for(var id : $ids) {
+    $ast.add (new VarDefinition(id.getLine(),id.getCharPositionInLine() + 1, id.getText(),$type.ast));};
+    };
 
-type: simple_type | complex_type ;
+type returns[Type ast]
+: simple_type  {$ast = $simple_type.ast;}
+| complex_type {$ast = $complex_type.ast;};
 
-func_definition:'def' ID '('((param (',' param)* ')') | ')')  '::' (simple_type | 'void') func_body;
+//func_definition returns [FuncDefinition ast]
+//:'def' ID '('((param (',' param)* ')')
+//                | ')')  '::' (simple_type | 'void') func_body;
+func_definition returns [FunctionDefinition ast]
+:DEF ID '('(((ID '::' simple_type) (',' (ID '::' simple_type))* ')')
+                | ')')  '::' (simple_type | 'void') func_body;
 
-param: ID '::' simple_type;
+//param: ID '::' simple_type;
 
-func_body:'do'(var_definition)*(statement)*'end';
+func_body returns [List<VarDefinition> defs= new ArrayList<>(),List<Statement> statements=new ArrayList<>()]
+:DO(var_definition)*(statement)*END;
 
-simple_type: 'char' | 'double' | 'int';
+simple_type returns [Type ast]
+        : CHAR {$ast = new Char($CHAR.getLine(),$CHAR.getCharPositionInLine() + 1);}
+        | DOUBLE{$ast = new DoubleType($DOUBLE.getLine(),$DOUBLE.getCharPositionInLine() + 1);}
+        | INT{$ast = new Int($INT.getLine(),$INT.getCharPositionInLine() + 1);};
 
-complex_type:array | struct;
+complex_type returns [Type ast]
+         :array {$ast = new Array($array.ast.getLine(),$array.ast.getColumn());}
+         |struct{$ast = new Struct($struct.ast.getLine(),$struct.ast.getColumn());};
 
-struct:'defstruct' 'do'  (var_definition)* 'end';
+struct returns [Struct ast]
+:DEFSTRUCT DO  (var_definition)* END {$ast = new Struct($DEFSTRUCT.getLine(),$DEFSTRUCT.getCharPositionInLine() + 1);};
 
 //comparison_operation: (ID | INT_CONSTANT | DIGIT)LOGIC_OPERATOR(ID | INT_CONSTANT | DIGIT);
 
@@ -57,29 +81,55 @@ write:'puts'(expression)(',' expression)*;
 
 read:'in'(expression)(',' expression)*;
 
-statement: while | if | assignation | read | write | return | invocation;
+statement returns [List<Statement> ast= new ArrayList<>()]
+: while
+    | if
+    | assignation
+    | read
+    | write
+    | return
+    | invocation;
 
-if: 'if' expression 'do' (statement)* ('else' (statement)*)? 'end';
+if returns [If ast]
+: 'if' expression DO (statement)* ('else' (statement)*)? END;
 
-while: 'while' expression+ 'do' (statement)* 'end';
+while returns [While ast]
+: 'while' expression+ DO (statement)* END;
 
-return:'return'expression;
+return returns [Return ast]
+:'return'expression;
 
 //cast:(CHAR_CONSTANT | ID | arithmetic_operation | field_acces | atributte_access | REAL_CONSTANT | DIGIT | INT_CONSTANT)'as'simple_type;
 
-atributte_access:ID'.'ID;
+//atributte_access:ID'.'ID;
 
-invocation:ID(('('expression (',' expression)*')') | ('('')'));
+invocation returns [Invocation ast]
+:ID(('('expression (',' expression)*')') | ('('')'));
 
-array:('[' (DIGIT | INT_CONSTANT) '::')+ (type ']');
+array returns [Array ast]
+: ('[' INT_CONSTANT '::') (array)* (type ']') {$ast = new Array($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1);};
 
 MAIN: 'main';
+
+DEF: 'def';
+
+DO: 'do';
+
+END: 'end';
+
+CHAR: 'char';
+
+DOUBLE: 'double';
+
+INT: 'int';
+
+DEFSTRUCT: 'defstruct';
+
+INT_CONSTANT: [0-9]+[0-9]* ;
 
 ONE_COMMENT: '#' ~[\r\n]* -> skip;
 
 WS: [ \t\r\n] -> skip;
-
-DIGIT:[1-9][0-9]*;
 
 CHAR_CONSTANT: '\''(('\\'[0-9][0-9][0-9]) | ('\\n' | '\\t' | '\\r') | (.)) '\'';
 
@@ -93,6 +143,10 @@ MULTI_COMMENT: '"""'.*?'"""' -> skip;
 
 ID: ([a-zA-Z] | '_') ('_' | [a-zA-Z] | [0-9])*;
 
-INT_CONSTANT: [0-9]+[0-9]* ;
+
+
+
+
+
 
 
