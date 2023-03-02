@@ -3,7 +3,7 @@ package es.uniovi.dlp.ast.program;
 import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.ast.statement.Statement;
 
-public class FunctionDefinition extends AbstractASTNode {
+public class FunctionDefinition extends AbstractASTNode implements Definition {
   private Statement statements;
   private VarDefinition varDefinitions;
   private String name;

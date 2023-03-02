@@ -12,8 +12,17 @@ import es.uniovi.dlp.ast.type.*;
 }
 
 program returns [Program ast]
-: (var_definition | func_definition)*main_func
-       ;
+: (varDefs+=var_definition | funcDefs+=func_definition )* main_func {
+var defs = new ArrayList<Definition>();
+for (var varDefs : $varDefs) {
+    defs.addAll(varDefs.ast);
+}
+for (var funcDef : $funcDefs) {
+    defs.add(funcDef.ast);
+}
+defs.add($main_func.ast);
+$ast = new Program($start.getLine(),$start.getCharPositionInLine() + 1,defs);
+       };
 //arithmetic_operation: (ID | invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT ) (arithmetic_operator (ID | invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT ))+;
 
 expression returns [Expression ast]
@@ -53,7 +62,8 @@ type returns[Type ast]
 //                | ')')  '::' (simple_type | 'void') func_body;
 func_definition returns [FunctionDefinition ast]
 :DEF ID '('(((ID '::' simple_type) (',' (ID '::' simple_type))* ')')
-                | ')')  '::' (simple_type | 'void') func_body;
+                | ')')  '::' (simple_type | 'void') func_body
+                {$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1);};
 
 //param: ID '::' simple_type;
 
@@ -78,30 +88,36 @@ struct returns [Struct ast]
 
 assignation: (expression | '('expression')') '=' (expression | '('expression')');
 
-write returns [Write ast]
-:PUTS(expression)(',' expression)*{$ast = new Write($PUTS.getLine(),$PUTS.getCharPositionInLine() + 1);};
+write returns [List<Write> ast= new ArrayList<>()]
+:PUTS(exp+=expression)(',' exp+=expression)*{
+for(var ex : $exp) {
+    $ast.add (new Write(ex.ast.getLine(),ex.ast.getColumn()));};
+    };
 
-read returns [Read ast]
-:IN (expression)(',' expression)* {$ast = new Read($IN.getLine(),$IN.getCharPositionInLine() + 1);};
+read returns [List<Read> ast = new ArrayList<>()]
+:IN (exp+=expression)(',' exp+=expression)* {
+for(var ex : $exp) {
+    $ast.add (new Read(ex.ast.getLine(),ex.ast.getColumn()));};
+    };
 
 statement returns [List<Statement> ast= new ArrayList<>()]
-:   while
-    | if
+:   whileStatement {$ast.add($whileStatement.ast);}
+    | ifStatement {$ast.add($ifStatement.ast);}
     | assignation
-    | read
-    | write
-    | return
+    | read {$ast.addAll($read.ast);}
+    | write {$ast.addAll($write.ast);}
+    | returnStatement {$ast.add($returnStatement.ast);}
     | invocation
     ;
 
 
-if returns [If ast]
+ifStatement returns [If ast]
 : IF expression DO (statement)* ('else' (statement)*)? END {$ast = new If($IF.getLine(),$IF.getCharPositionInLine() + 1);};
 
-while returns [While ast]
+whileStatement returns [While ast]
 : WHILE expression+ DO (statement)* END{$ast = new While($WHILE.getLine(),$WHILE.getCharPositionInLine() + 1);};
 
-return returns [Return ast]
+returnStatement returns [Return ast]
 :RETURN expression {$ast = new Return($RETURN.getLine(),$RETURN.getCharPositionInLine() + 1);};
 
 //cast:(CHAR_CONSTANT | ID | arithmetic_operation | field_acces | atributte_access | REAL_CONSTANT | DIGIT | INT_CONSTANT)'as'simple_type;
