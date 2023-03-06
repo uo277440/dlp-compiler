@@ -5,7 +5,8 @@ public class ArithmeticOperation extends AbstractExpression {
   private Expression leftExpression;
   private Expression rightExpression;
 
-  public ArithmeticOperation(int line, int column) {
+  public ArithmeticOperation(
+      int line, int column, Expression leftExpression, String op, Expression rightExpression) {
     super(line, column);
   }
 }

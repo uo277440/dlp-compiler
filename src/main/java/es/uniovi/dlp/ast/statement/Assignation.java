@@ -1,13 +1,14 @@
 package es.uniovi.dlp.ast.statement;
 
 import es.uniovi.dlp.ast.expression.Expression;
-import es.uniovi.dlp.ast.expression.Variable;
 
 public class Assignation extends AbstractStatement {
-  private Variable left;
+  private Expression left;
   private Expression right;
 
-  public Assignation(int line, int column) {
+  public Assignation(int line, int column, Expression left, Expression right) {
     super(line, column);
+    this.left = left;
+    this.right = right;
   }
 }

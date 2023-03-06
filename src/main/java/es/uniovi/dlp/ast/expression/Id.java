@@ -1,7 +1,10 @@
 package es.uniovi.dlp.ast.expression;
 
 public class Id extends AbstractExpression {
-  public Id(int line, int column) {
+  private String name;
+
+  public Id(int line, int column, String name) {
     super(line, column);
+    this.name = name;
   }
 }

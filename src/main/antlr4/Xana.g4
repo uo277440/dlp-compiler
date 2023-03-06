@@ -17,6 +17,7 @@ var defs = new ArrayList<Definition>();
 for (var varDefs : $varDefs) {
     defs.addAll(varDefs.ast);
 }
+
 for (var funcDef : $funcDefs) {
     defs.add(funcDef.ast);
 }
@@ -26,24 +27,35 @@ $ast = new Program($start.getLine(),$start.getCharPositionInLine() + 1,defs);
 //arithmetic_operation: (ID | invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT ) (arithmetic_operator (ID | invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT ))+;
 
 expression returns [Expression ast]
-:  expression('['expression']')+ expression?
-    |expression'as'simple_type
-    |INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1);}
-    | ID {$ast = new Id($ID.getLine(),$ID.getCharPositionInLine() + 1);}
-    | REAL_CONSTANT {$ast = new RealConstant($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1);}
+:  left=expression('['right=expression']')+ {$ast = new Indexing($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$right.ast);}
+    |ex=expression'as'st=simple_type {$ast = new Cast($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast,$st.ast);}
+    |INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1,LexerHelper.lexemeToInt($INT_CONSTANT.getText()));}
+    | name=ID {$ast = new Id($name.getLine(),$name.getCharPositionInLine() + 1,$name.getText());}
+    | REAL_CONSTANT {$ast = new RealConstant($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1,LexerHelper.lexemeToReal($REAL_CONSTANT.getText()));}
     | invocation {$ast = $invocation.ast;}
-    | CHAR_CONSTANT
-    | '!' expression
-    | '('expression')'
-    | expression ('>' | '<' | '!=' | '==' | '<=' | '>=' | '&&' | '||') expression
-    |expression ('+'|'-'|'/'|'*'|'^'|'%') expression
-    |expression'.'expression
-    | '-'expression
+    | CHAR_CONSTANT {$ast = new CharConstant($start.getLine(),$start.getCharPositionInLine() + 1,LexerHelper.lexemeToChar($CHAR_CONSTANT.getText()));}
+    | '!' ex=expression {$ast = new Not($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
+    | '('expression')'{$ast= $expression.ast;}
+    | left=expression op=('>' | '<' | '!=' | '==' | '<=' | '>=' | '&&' | '||') right=expression {$ast = new ComparisonOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    |left=expression op=('/'|'*'|'^'|'%') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    |left=expression op=('+'|'-') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    |left=expression'.'idR=ID {$ast = new FieldAccess($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$idR.getText());}
+    | '-'ex=expression {$ast = new UnaryMinus($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     ;
 
 
 main_func returns [FunctionDefinition ast]
-:DEF MAIN'('')' DO (var_definition)*(statement)*END{$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1);};
+:DEF name=MAIN'('')' DO (defs+=var_definition)*(sts+=statement)*END{
+var definitions =new ArrayList<VarDefinition>();
+var statements=new ArrayList<Statement>();
+for(var d:$defs){
+definitions.addAll(d.ast);
+}
+for(var s:$sts){
+statements.addAll(s.ast);
+}
+$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1,$name.getText(),definitions,statements,new FunctionType($DEF.getLine(),$DEF.getCharPositionInLine() + 1,new ArrayList<VarDefinition>(),null));
+};
 
 //field_acces:(ID | atributte_access | invocation)('['(cast | arithmetic_operation | DIGIT | INT_CONSTANT | atributte_access | field_acces | ID |invocation)']')+;
 
@@ -52,7 +64,9 @@ var_definition returns[List<VarDefinition> ast=new ArrayList<>()]
     for(var id : $ids) {
     $ast.add (new VarDefinition(id.getLine(),id.getCharPositionInLine() + 1, id.getText(),$type.ast));};
     };
-
+returnType returns [Type ast]:
+simple_type{$ast = $simple_type.ast;}
+| VOID {$ast = new VoidType($VOID.getLine(),$VOID.getCharPositionInLine() + 1);};
 type returns[Type ast]
 : simple_type  {$ast = $simple_type.ast;}
 | complex_type {$ast = $complex_type.ast;};
@@ -61,14 +75,26 @@ type returns[Type ast]
 //:'def' ID '('((param (',' param)* ')')
 //                | ')')  '::' (simple_type | 'void') func_body;
 func_definition returns [FunctionDefinition ast]
-:DEF ID '('(((ID '::' simple_type) (',' (ID '::' simple_type))* ')')
-                | ')')  '::' (simple_type | 'void') func_body
-                {$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1);};
-
-//param: ID '::' simple_type;
-
+:DEF name=ID '('(((params+=param) (','(params+=param))* ')')
+                | ')')  '::' (returnType) body=func_body{
+                var pars = new ArrayList<VarDefinition>();
+                for(var p : $params){
+                pars.add(p.ast);
+                }
+                $ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1,$name.getText(),$body.defs,$body.statements,new FunctionType($DEF.getLine(),$DEF.getCharPositionInLine() + 1,pars,$returnType.ast));};
+param returns [VarDefinition ast]
+:name=ID '::' tipo=simple_type{$ast = new VarDefinition($name.getLine(),$name.getCharPositionInLine() + 1,$name.getText(),$tipo.ast);};
 func_body returns [List<VarDefinition> defs= new ArrayList<>(),List<Statement> statements=new ArrayList<>()]
-:DO(var_definition)*(statement)*END;
+:DO(vars+=var_definition)*(stmnts+=statement)*END{
+var varDefs = new ArrayList<VarDefinition>();
+var sts = new ArrayList<Statement>();
+for(var def : $vars)
+    varDefs.addAll(def.ast);
+for(var st : $stmnts)
+    sts.addAll(st.ast);
+$defs= varDefs;
+$statements=sts;
+};
 
 simple_type returns [Type ast]
         : CHAR {$ast = new Char($CHAR.getLine(),$CHAR.getCharPositionInLine() + 1);}
@@ -76,63 +102,93 @@ simple_type returns [Type ast]
         | INT{$ast = new Int($INT.getLine(),$INT.getCharPositionInLine() + 1);};
 
 complex_type returns [Type ast]
-         :array {$ast = new Array($array.ast.getLine(),$array.ast.getColumn());}
-         |struct{$ast = new Struct($struct.ast.getLine(),$struct.ast.getColumn());};
+         :array {$ast = $array.ast;}
+         |struct{$ast = $struct.ast;};
 
 struct returns [Struct ast]
-:DEFSTRUCT DO  (var_definition)* END {$ast = new Struct($DEFSTRUCT.getLine(),$DEFSTRUCT.getCharPositionInLine() + 1);};
+:DEFSTRUCT DO  (vars+=var_definition)* END {
+var structs = new ArrayList<StructField>();
+var i =0;
+for(var v: $vars){
+for(var vd : v.ast){
+structs.add(new StructField(vd.getName(),vd.getType()));
+}
+}
+$ast = new Struct($DEFSTRUCT.getLine(),$DEFSTRUCT.getCharPositionInLine() + 1,structs);
+};
 
 //comparison_operation: (ID | INT_CONSTANT | DIGIT)LOGIC_OPERATOR(ID | INT_CONSTANT | DIGIT);
 
 //logic_operattion: (invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT | ID) (LOGIC_OPERATOR (invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT | ID))+;
 
-assignation: (expression | '('expression')') '=' (expression | '('expression')');
-
+assignation returns [Assignation ast]
+: (left = expression | '('left = expression')') '=' (right = expression | '('right = expression')'){
+$ast = new Assignation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$right.ast);};
 write returns [List<Write> ast= new ArrayList<>()]
 :PUTS(exp+=expression)(',' exp+=expression)*{
 for(var ex : $exp) {
-    $ast.add (new Write(ex.ast.getLine(),ex.ast.getColumn()));};
+    if(ex.ast != null)
+    $ast.add (new Write(ex.ast.getLine(),ex.ast.getColumn(),ex.ast));};
     };
 
 read returns [List<Read> ast = new ArrayList<>()]
 :IN (exp+=expression)(',' exp+=expression)* {
 for(var ex : $exp) {
-    $ast.add (new Read(ex.ast.getLine(),ex.ast.getColumn()));};
+    if(ex.ast != null)
+    $ast.add(new Read(ex.ast.getLine(),ex.ast.getColumn(),ex.ast));};
     };
 
 statement returns [List<Statement> ast= new ArrayList<>()]
 :   whileStatement {$ast.add($whileStatement.ast);}
     | ifStatement {$ast.add($ifStatement.ast);}
-    | assignation
+    | assignation {$ast.add($assignation.ast);}
     | read {$ast.addAll($read.ast);}
     | write {$ast.addAll($write.ast);}
     | returnStatement {$ast.add($returnStatement.ast);}
-    | invocation
+    | invocation {$ast.add($invocation.ast);}
     ;
 
 
 ifStatement returns [If ast]
-: IF expression DO (statement)* ('else' (statement)*)? END {$ast = new If($IF.getLine(),$IF.getCharPositionInLine() + 1);};
+: IF condition=expression DO (statements+=statement)* ('else' (elseStatements+=statement)*)? END {
+var sts=new ArrayList<Statement>();
+var elseSts=new ArrayList<Statement>();
+for(var state: $statements){
+if(state.ast != null)
+sts.addAll(state.ast);
+}
+for(var stateE: $elseStatements){
+if(stateE.ast != null)
+elseSts.addAll(stateE.ast);
+}
+$ast = new If($IF.getLine(),$IF.getCharPositionInLine() + 1,$condition.ast,sts,elseSts);
+};
 
 whileStatement returns [While ast]
-: WHILE expression+ DO (statement)* END{$ast = new While($WHILE.getLine(),$WHILE.getCharPositionInLine() + 1);};
+: WHILE condition=expression DO (statements+=statement)* END{
+var sts=new ArrayList<Statement>();
+for(var state: $statements){
+if(state.ast != null)
+sts.addAll(state.ast);
+}
+$ast = new While($WHILE.getLine(),$WHILE.getCharPositionInLine() + 1,$condition.ast,sts);
+};
 
 returnStatement returns [Return ast]
-:RETURN expression {$ast = new Return($RETURN.getLine(),$RETURN.getCharPositionInLine() + 1);};
+:RETURN exp = expression {$ast = new Return($RETURN.getLine(),$RETURN.getCharPositionInLine() + 1,$exp.ast);};
 
-//cast:(CHAR_CONSTANT | ID | arithmetic_operation | field_acces | atributte_access | REAL_CONSTANT | DIGIT | INT_CONSTANT)'as'simple_type;
-
-//atributte_access:ID'.'ID;
 
 invocation returns [Invocation ast]
 :ID(('('expression (',' expression)*')') | ('('')')) {$ast = new Invocation($ID.getLine(),$ID.getCharPositionInLine() + 1);};
 
 array returns [Array ast]
-: ('[' INT_CONSTANT '::') (array)* (type ']') {$ast = new Array($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1);};
+: ('[' size=INT_CONSTANT '::')  (tipo=type ']') {$ast = new Array($start.getLine(),$start.getCharPositionInLine() + 1,$tipo.ast,LexerHelper.lexemeToInt($size.getText()));};
 
 PUTS: 'puts';
 
 IN: 'in';
+
+VOID: 'void';
 
 IF: 'if';
 

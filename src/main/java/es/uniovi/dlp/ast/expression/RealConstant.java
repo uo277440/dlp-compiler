@@ -1,7 +1,10 @@
 package es.uniovi.dlp.ast.expression;
 
 public class RealConstant extends AbstractExpression {
-  public RealConstant(int line, int column) {
+  double value;
+
+  public RealConstant(int line, int column, double value) {
     super(line, column);
+    this.value = value;
   }
 }

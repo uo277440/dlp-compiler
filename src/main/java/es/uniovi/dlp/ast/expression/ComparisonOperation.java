@@ -5,7 +5,11 @@ public class ComparisonOperation extends AbstractExpression {
   private Expression leftExpression;
   private Expression rightExpression;
 
-  public ComparisonOperation(int line, int column) {
+  public ComparisonOperation(
+      int line, int column, Expression leftExpression, String op, Expression rightExpression) {
     super(line, column);
+    this.leftExpression = leftExpression;
+    this.rightExpression = rightExpression;
+    this.op = op;
   }
 }

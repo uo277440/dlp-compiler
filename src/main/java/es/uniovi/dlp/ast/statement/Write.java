@@ -1,12 +1,12 @@
 package es.uniovi.dlp.ast.statement;
 
 import es.uniovi.dlp.ast.expression.Expression;
-import java.util.List;
 
 public class Write extends AbstractStatement {
-  private List<Expression> body;
+  private Expression body;
 
-  public Write(int line, int column) {
+  public Write(int line, int column, Expression body) {
     super(line, column);
+    this.body = body;
   }
 }
