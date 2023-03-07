@@ -36,9 +36,10 @@ expression returns [Expression ast]
     | CHAR_CONSTANT {$ast = new CharConstant($start.getLine(),$start.getCharPositionInLine() + 1,LexerHelper.lexemeToChar($CHAR_CONSTANT.getText()));}
     | '!' ex=expression {$ast = new Not($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     | '('expression')'{$ast= $expression.ast;}
-    | left=expression op=('>' | '<' | '!=' | '==' | '<=' | '>=' | '&&' | '||') right=expression {$ast = new ComparisonOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
-    |left=expression op=('/'|'*'|'^'|'%') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    |left=expression op=('/'|'*'|'%') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
     |left=expression op=('+'|'-') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    | left=expression op=('>' | '<' | '!=' | '==' | '<=' | '>=') right=expression {$ast = new ComparisonOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    | left=expression op=('&&' | '||') right=expression {$ast = new LogicOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
     |left=expression'.'idR=ID {$ast = new FieldAccess($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$idR.getText());}
     | '-'ex=expression {$ast = new UnaryMinus($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     ;
