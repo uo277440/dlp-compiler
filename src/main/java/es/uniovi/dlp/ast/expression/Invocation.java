@@ -6,7 +6,9 @@ import java.util.List;
 public class Invocation extends AbstractExpression implements Statement {
   private List<Expression> arguments;
 
-  public Invocation(int line, int column) {
+  public Invocation(int line, int column,List<Expression> args) {
+
     super(line, column);
+    this.arguments=args;
   }
 }

@@ -180,7 +180,13 @@ returnStatement returns [Return ast]
 
 
 invocation returns [Invocation ast]
-:ID(('('expression (',' expression)*')') | ('('')')) {$ast = new Invocation($ID.getLine(),$ID.getCharPositionInLine() + 1);};
+:ID(('('exps+=expression (',' exps+=expression)*')') | ('('')')) {
+var exs = new ArrayList<Expression>();
+for(var e : $exps){
+exs.add(e.ast);
+}
+$ast = new Invocation($ID.getLine(),$ID.getCharPositionInLine() + 1,exs);
+};
 
 array returns [Array ast]
 : ('[' size=INT_CONSTANT '::')  (tipo=type ']') {$ast = new Array($start.getLine(),$start.getCharPositionInLine() + 1,$tipo.ast,LexerHelper.lexemeToInt($size.getText()));};

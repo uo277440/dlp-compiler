@@ -1803,6 +1803,8 @@ public class XanaParser extends Parser {
 	public static class InvocationContext extends ParserRuleContext {
 		public Invocation ast;
 		public Token ID;
+		public ExpressionContext expression;
+		public List<ExpressionContext> exps = new ArrayList<ExpressionContext>();
 		public TerminalNode ID() { return getToken(XanaParser.ID, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
@@ -1834,7 +1836,8 @@ public class XanaParser extends Parser {
 				setState(341);
 				match(T__4);
 				setState(342);
-				expression(0);
+				((InvocationContext)_localctx).expression = expression(0);
+				((InvocationContext)_localctx).exps.add(((InvocationContext)_localctx).expression);
 				setState(347);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -1844,7 +1847,8 @@ public class XanaParser extends Parser {
 					setState(343);
 					match(T__20);
 					setState(344);
-					expression(0);
+					((InvocationContext)_localctx).expression = expression(0);
+					((InvocationContext)_localctx).exps.add(((InvocationContext)_localctx).expression);
 					}
 					}
 					setState(349);
@@ -1867,7 +1871,13 @@ public class XanaParser extends Parser {
 				}
 				break;
 			}
-			((InvocationContext)_localctx).ast =  new Invocation(((InvocationContext)_localctx).ID.getLine(),((InvocationContext)_localctx).ID.getCharPositionInLine() + 1);
+
+			var exs = new ArrayList<Expression>();
+			for(var e : ((InvocationContext)_localctx).exps){
+			exs.add(e.ast);
+			}
+			((InvocationContext)_localctx).ast =  new Invocation(((InvocationContext)_localctx).ID.getLine(),((InvocationContext)_localctx).ID.getCharPositionInLine() + 1,exs);
+
 			}
 		}
 		catch (RecognitionException re) {

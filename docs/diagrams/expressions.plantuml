@@ -48,9 +48,6 @@ class FieldAccess{
 leftF : Expression
 rightF: String
 }
-class Unary{
-expression:Expression
-}
 class UnaryMinus{
 expression:Expression
 }
@@ -65,7 +62,6 @@ Expression <|.. IntLiteral
 Expression <|.. Invocation
 Expression <|.. DoubleLiteral
 Expression <|.. Variable
-Expression <|.. Unary
 Expression <|.. Not
 Expression <|.. Cast
 Expression <|.. UnaryMinus
