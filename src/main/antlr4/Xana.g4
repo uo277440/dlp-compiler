@@ -12,7 +12,7 @@ import es.uniovi.dlp.ast.type.*;
 }
 
 program returns [Program ast]
-: (varDefs+=var_definition | funcDefs+=func_definition )* main_func {
+: (varDefs+=var_definition | funcDefs+=func_definition )* main_func EOF{
 var defs = new ArrayList<Definition>();
 for (var varDefs : $varDefs) {
     defs.addAll(varDefs.ast);
@@ -22,26 +22,35 @@ for (var funcDef : $funcDefs) {
     defs.add(funcDef.ast);
 }
 defs.add($main_func.ast);
-$ast = new Program($start.getLine(),$start.getCharPositionInLine() + 1,defs);
+$ast = new Program(1,1,defs);
        };
 //arithmetic_operation: (ID | invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT ) (arithmetic_operator (ID | invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT ))+;
 
 expression returns [Expression ast]
-:  left=expression('['right=expression']')+ {$ast = new Indexing($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$right.ast);}
-    |ex=expression'as'st=simple_type {$ast = new Cast($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast,$st.ast);}
-    |INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1,LexerHelper.lexemeToInt($INT_CONSTANT.getText()));}
+:
+
+     INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(),$INT_CONSTANT.getCharPositionInLine() + 1,LexerHelper.lexemeToInt($INT_CONSTANT.getText()));}
     | name=ID {$ast = new Id($name.getLine(),$name.getCharPositionInLine() + 1,$name.getText());}
     | REAL_CONSTANT {$ast = new RealConstant($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1,LexerHelper.lexemeToReal($REAL_CONSTANT.getText()));}
-    | invocation {$ast = $invocation.ast;}
     | CHAR_CONSTANT {$ast = new CharConstant($start.getLine(),$start.getCharPositionInLine() + 1,LexerHelper.lexemeToChar($CHAR_CONSTANT.getText()));}
-    | '!' ex=expression {$ast = new Not($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     | '('expression')'{$ast= $expression.ast;}
+    | left=expression('['rr+=expression']')+ {
+    var indexes = new ArrayList<Expression>();
+    for(var r:$rr){
+    indexes.add(r.ast);
+    }
+    $ast = new Indexing($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,indexes);
+    }
+    |left=expression'.'idR=ID {$ast = new FieldAccess($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$idR.getText());}
+    |ex=expression'as'st=simple_type {$ast = new Cast($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast,$st.ast);}
+    | '-'ex=expression {$ast = new UnaryMinus($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
+    | '!' ex=expression {$ast = new Not($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     |left=expression op=('/'|'*'|'%') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
     |left=expression op=('+'|'-') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
     | left=expression op=('>' | '<' | '!=' | '==' | '<=' | '>=') right=expression {$ast = new ComparisonOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
     | left=expression op=('&&' | '||') right=expression {$ast = new LogicOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
-    |left=expression'.'idR=ID {$ast = new FieldAccess($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$idR.getText());}
-    | '-'ex=expression {$ast = new UnaryMinus($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
+    | invocation {$ast = $invocation.ast;}
+
     ;
 
 
@@ -55,7 +64,7 @@ definitions.addAll(d.ast);
 for(var s:$sts){
 statements.addAll(s.ast);
 }
-$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1,$name.getText(),definitions,statements,new FunctionType($DEF.getLine(),$DEF.getCharPositionInLine() + 1,new ArrayList<VarDefinition>(),null));
+$ast = new FunctionDefinition($DEF.getLine(),$DEF.getCharPositionInLine() + 1,$name.getText(),definitions,statements,new FunctionType($DEF.getLine(),$DEF.getCharPositionInLine() + 1,new ArrayList<VarDefinition>(),new VoidType($start.getLine(),$start.getCharPositionInLine() + 1)));
 };
 
 //field_acces:(ID | atributte_access | invocation)('['(cast | arithmetic_operation | DIGIT | INT_CONSTANT | atributte_access | field_acces | ID |invocation)']')+;
@@ -112,7 +121,7 @@ var structs = new ArrayList<StructField>();
 var i =0;
 for(var v: $vars){
 for(var vd : v.ast){
-structs.add(new StructField(vd.getName(),vd.getType()));
+structs.add(new StructField(vd.getName(),vd.getType(),vd.getLine(),vd.getColumn()));
 }
 }
 $ast = new Struct($DEFSTRUCT.getLine(),$DEFSTRUCT.getCharPositionInLine() + 1,structs);
@@ -122,9 +131,9 @@ $ast = new Struct($DEFSTRUCT.getLine(),$DEFSTRUCT.getCharPositionInLine() + 1,st
 
 //logic_operattion: (invocation|INT_CONSTANT | DIGIT  | REAL_CONSTANT | ID) (LOGIC_OPERATOR (invocation|DIGIT | INT_CONSTANT | REAL_CONSTANT | ID))+;
 
-assignation returns [Assignation ast]
+assignation returns [Assignment ast]
 : (left = expression | '('left = expression')') '=' (right = expression | '('right = expression')'){
-$ast = new Assignation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$right.ast);};
+$ast = new Assignment($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$right.ast);};
 write returns [List<Write> ast= new ArrayList<>()]
 :PUTS(exp+=expression)(',' exp+=expression)*{
 for(var ex : $exp) {
@@ -180,12 +189,12 @@ returnStatement returns [Return ast]
 
 
 invocation returns [Invocation ast]
-:ID(('('exps+=expression (',' exps+=expression)*')') | ('('')')) {
+:name=ID(('('exps+=expression (',' exps+=expression)*')') | ('('')')) {
 var exs = new ArrayList<Expression>();
 for(var e : $exps){
 exs.add(e.ast);
 }
-$ast = new Invocation($ID.getLine(),$ID.getCharPositionInLine() + 1,exs);
+$ast = new Invocation($start.getLine(),$start.getCharPositionInLine() + 1,exs,new Id($start.getLine(),$start.getCharPositionInLine() + 1,$name.getText()));
 };
 
 array returns [Array ast]

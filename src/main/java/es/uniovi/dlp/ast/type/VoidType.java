@@ -1,7 +1,7 @@
 package es.uniovi.dlp.ast.type;
 
 public class VoidType extends AbstractType {
-    public VoidType(int line, int column) {
-        super(line, column);
-    }
+  public VoidType(int line, int column) {
+    super(line, column);
+  }
 }

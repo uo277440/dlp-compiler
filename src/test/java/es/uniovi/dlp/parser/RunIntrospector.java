@@ -12,7 +12,6 @@ public class RunIntrospector {
 
   public static void main(String... args) throws IOException {
 
-
     CharStream input = CharStreams.fromFileName("examples/basic.xana");
     XanaLexer lexer = new XanaLexer(input);
 
