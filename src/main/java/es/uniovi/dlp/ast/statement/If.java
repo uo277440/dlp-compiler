@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.statement;
 
 import es.uniovi.dlp.ast.expression.Expression;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class If extends AbstractStatement {
@@ -14,5 +15,11 @@ public class If extends AbstractStatement {
     this.condition = condition;
     this.body = body;
     this.elseBody = elseBody;
+  }
+
+  @Override
+  public <ReturnType, ParamType> ReturnType accept(
+      AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+    return null;
   }
 }

@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.statement;
 
 import es.uniovi.dlp.ast.expression.Expression;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class While extends AbstractStatement {
@@ -11,5 +12,11 @@ public class While extends AbstractStatement {
     super(line, column);
     this.condition = condition;
     this.body = body;
+  }
+
+  @Override
+  public <ReturnType, ParamType> ReturnType accept(
+      AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+    return null;
   }
 }
