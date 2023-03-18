@@ -4,6 +4,19 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class LogicOperation extends AbstractExpression {
   private String op;
+
+  public String getOp() {
+    return op;
+  }
+
+  public Expression getLeftExpression() {
+    return leftExpression;
+  }
+
+  public Expression getRightExpression() {
+    return rightExpression;
+  }
+
   private Expression leftExpression;
   private Expression rightExpression;
 

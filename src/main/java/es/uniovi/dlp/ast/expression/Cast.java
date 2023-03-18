@@ -4,6 +4,14 @@ import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Cast extends AbstractExpression {
+  public Expression getLeft() {
+    return left;
+  }
+
+  public Type getType() {
+    return type;
+  }
+
   private Expression left;
   private Type type;
 

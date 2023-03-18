@@ -3,6 +3,10 @@ package es.uniovi.dlp.ast.expression;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class CharConstant extends AbstractExpression {
+  public char getValue() {
+    return value;
+  }
+
   char value;
 
   public CharConstant(int line, int column, char value) {

@@ -5,6 +5,14 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class Invocation extends AbstractExpression implements Statement {
+  public List<Expression> getArguments() {
+    return arguments;
+  }
+
+  public Expression getName() {
+    return name;
+  }
+
   private List<Expression> arguments;
   Expression name;
 

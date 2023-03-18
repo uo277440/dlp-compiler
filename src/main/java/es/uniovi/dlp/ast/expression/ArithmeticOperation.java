@@ -5,6 +5,19 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 public class ArithmeticOperation extends AbstractExpression {
   private String op;
   private Expression leftExpression;
+
+  public String getOp() {
+    return op;
+  }
+
+  public Expression getLeftExpression() {
+    return leftExpression;
+  }
+
+  public Expression getRightExpression() {
+    return rightExpression;
+  }
+
   private Expression rightExpression;
 
   public ArithmeticOperation(

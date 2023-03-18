@@ -3,6 +3,14 @@ package es.uniovi.dlp.ast.expression;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class FieldAccess extends AbstractExpression {
+  public Expression getField() {
+    return field;
+  }
+
+  public String getAtributte() {
+    return atributte;
+  }
+
   private Expression field;
   private String atributte;
 
