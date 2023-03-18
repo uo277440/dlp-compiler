@@ -8,6 +8,7 @@ public class CharConstant extends AbstractExpression {
   public CharConstant(int line, int column, char value) {
     super(line, column);
     this.value = value;
+    this.setLvalue(false);
   }
 
   @Override
@@ -15,4 +16,7 @@ public class CharConstant extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
+
 }

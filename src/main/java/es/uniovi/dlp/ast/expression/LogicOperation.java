@@ -13,6 +13,7 @@ public class LogicOperation extends AbstractExpression {
     this.leftExpression = leftExpression;
     this.rightExpression = rightExpression;
     this.op = op;
+    this.setLvalue(false);
   }
 
   @Override
@@ -20,4 +21,6 @@ public class LogicOperation extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

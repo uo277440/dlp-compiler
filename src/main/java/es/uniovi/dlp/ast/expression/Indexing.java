@@ -11,6 +11,7 @@ public class Indexing extends AbstractExpression {
     super(line, column);
     this.name = name;
     this.indexes = index;
+    this.setLvalue(true);
   }
 
   @Override
@@ -18,4 +19,6 @@ public class Indexing extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

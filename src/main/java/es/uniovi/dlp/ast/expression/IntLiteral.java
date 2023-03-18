@@ -8,6 +8,7 @@ public class IntLiteral extends AbstractExpression {
   public IntLiteral(int line, int column, int value) {
     super(line, column);
     this.value = value;
+    this.setLvalue(false);
   }
 
   @Override
@@ -15,4 +16,6 @@ public class IntLiteral extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

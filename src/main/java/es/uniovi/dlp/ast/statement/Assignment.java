@@ -4,6 +4,8 @@ import es.uniovi.dlp.ast.expression.Expression;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Assignment extends AbstractStatement {
+
+
   private Expression left;
   private Expression right;
 
@@ -17,5 +19,12 @@ public class Assignment extends AbstractStatement {
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
+  }
+  public Expression getLeft() {
+    return left;
+  }
+
+  public Expression getRight() {
+    return right;
   }
 }

@@ -8,6 +8,7 @@ public class Id extends AbstractExpression {
   public Id(int line, int column, String name) {
     super(line, column);
     this.name = name;
+    this.setLvalue(true);
   }
 
   @Override
@@ -15,4 +16,6 @@ public class Id extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

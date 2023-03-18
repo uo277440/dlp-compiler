@@ -14,4 +14,6 @@ public class DoubleLiteral extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

@@ -8,6 +8,7 @@ public class RealConstant extends AbstractExpression {
   public RealConstant(int line, int column, double value) {
     super(line, column);
     this.value = value;
+    this.setLvalue(false);
   }
 
   @Override
@@ -15,4 +16,6 @@ public class RealConstant extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

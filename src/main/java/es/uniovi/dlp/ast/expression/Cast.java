@@ -11,6 +11,7 @@ public class Cast extends AbstractExpression {
     super(line, column);
     this.left = left;
     this.type = type;
+    this.setLvalue(false);
   }
 
   @Override
@@ -18,4 +19,7 @@ public class Cast extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
+
 }

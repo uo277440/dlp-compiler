@@ -8,6 +8,7 @@ public class UnaryMinus extends AbstractExpression {
   public UnaryMinus(int line, int column, Expression ex) {
     super(line, column);
     this.expression = ex;
+    this.setLvalue(false);
   }
 
   @Override
@@ -15,4 +16,6 @@ public class UnaryMinus extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

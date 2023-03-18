@@ -13,11 +13,22 @@ public class ArithmeticOperation extends AbstractExpression {
     this.leftExpression = leftExpression;
     this.rightExpression = rightExpression;
     this.op = op;
+    this.setLvalue(false);
   }
 
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
+  }
+
+  @Override
+  public boolean isLvalue() {
+    return false;
+  }
+
+  @Override
+  public void setLvalue(boolean lvalue) {
+
   }
 }

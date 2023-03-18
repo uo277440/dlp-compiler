@@ -10,6 +10,7 @@ public class FieldAccess extends AbstractExpression {
     super(line, column);
     this.field = left;
     this.atributte = rightF;
+    this.setLvalue(true);
   }
 
   @Override
@@ -17,4 +18,6 @@ public class FieldAccess extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

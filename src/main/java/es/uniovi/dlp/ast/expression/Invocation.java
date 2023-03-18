@@ -13,6 +13,7 @@ public class Invocation extends AbstractExpression implements Statement {
     super(line, column);
     this.arguments = args;
     this.name = left;
+    this.setLvalue(false);
   }
 
   @Override
@@ -20,4 +21,6 @@ public class Invocation extends AbstractExpression implements Statement {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }
