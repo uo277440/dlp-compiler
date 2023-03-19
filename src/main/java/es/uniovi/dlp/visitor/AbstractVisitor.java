@@ -1,9 +1,11 @@
 package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.expression.*;
+import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.Program;
 import es.uniovi.dlp.ast.statement.Assignment;
 import es.uniovi.dlp.ast.statement.Read;
+import es.uniovi.dlp.ast.statement.Statement;
 
 public abstract class AbstractVisitor<ReturnType, ParamType>
     implements Visitor<ReturnType, ParamType> {
@@ -29,6 +31,16 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
     ao.getLeftExpression().accept(this,param);
     ao.getRightExpression().accept(this,param);
     return null;
+  }
+  @Override
+  public ReturnType visit(FunctionDefinition fd, ParamType param) {
+    fd.getType().accept(this, param);
+    fd.getBodyDefs().forEach(index -> index.accept(this, param));
+    fd.getStatements().forEach(index -> index.accept(this, param));
+
+
+    return null;
+
   }
   @Override
   public ReturnType visit(Cast cast, ParamType param) {

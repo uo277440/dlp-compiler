@@ -1,6 +1,7 @@
 package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.expression.*;
+import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.Program;
 import es.uniovi.dlp.ast.statement.Assignment;
 import es.uniovi.dlp.ast.statement.Read;
@@ -22,5 +23,9 @@ public interface Visitor<ReturnType, ParamType> {
   ReturnType visit(Not not, ParamType param);
   ReturnType visit(RealConstant rc, ParamType param);
   ReturnType visit(UnaryMinus um, ParamType param);
+
+
+
+  ReturnType visit(FunctionDefinition fd, ParamType param);
 
 }

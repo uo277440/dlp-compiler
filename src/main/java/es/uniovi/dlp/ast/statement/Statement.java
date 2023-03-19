@@ -1,3 +1,7 @@
 package es.uniovi.dlp.ast.statement;
 
-public interface Statement {}
+import es.uniovi.dlp.ast.ASTNode;
+
+public interface Statement extends ASTNode {
+
+}

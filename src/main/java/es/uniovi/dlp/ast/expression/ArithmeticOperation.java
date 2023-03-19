@@ -35,13 +35,5 @@ public class ArithmeticOperation extends AbstractExpression {
     return null;
   }
 
-  @Override
-  public boolean isLvalue() {
-    return false;
-  }
 
-  @Override
-  public void setLvalue(boolean lvalue) {
-
-  }
 }

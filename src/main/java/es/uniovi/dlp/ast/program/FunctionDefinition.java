@@ -7,6 +7,22 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class FunctionDefinition extends AbstractASTNode implements Definition {
+  public FunctionType getType() {
+    return type;
+  }
+
+  public List<VarDefinition> getBodyDefs() {
+    return bodyDefs;
+  }
+
+  public List<Statement> getStatements() {
+    return statements;
+  }
+
+  public String getName() {
+    return name;
+  }
+
   private FunctionType type;
 
   private List<VarDefinition> bodyDefs;
@@ -31,6 +47,6 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return null;
+    return visitor.visit(this, param);
   }
 }
