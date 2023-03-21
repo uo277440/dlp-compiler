@@ -19,6 +19,7 @@ public class ErrorManager {
   }
 
   public List<Error> getErrors() {
+
     return errors;
   }
 
@@ -28,5 +29,6 @@ public class ErrorManager {
 
   public void addError(Error e) {
     errors.add(e);
+
   }
 }

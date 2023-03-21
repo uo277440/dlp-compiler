@@ -6,6 +6,7 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class VarDefinition extends AbstractASTNode implements Definition {
   private String name;
+
   Type type;
 
   public VarDefinition(int line, int column, String name, Type type) {

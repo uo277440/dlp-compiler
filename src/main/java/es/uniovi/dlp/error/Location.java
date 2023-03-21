@@ -4,6 +4,7 @@ public record Location(int line, int column) implements Comparable<Location> {
   @Override
   public int compareTo(Location location) {
     return this.compareTo(location);
+
   }
 
   @Override

@@ -1,5 +1,6 @@
 package es.uniovi.dlp.visitor.semantic;
 
+
 import es.uniovi.dlp.ast.expression.*;
 import es.uniovi.dlp.ast.statement.Assignment;
 import es.uniovi.dlp.ast.statement.Read;
@@ -113,3 +114,4 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return null;
     }
 }
+

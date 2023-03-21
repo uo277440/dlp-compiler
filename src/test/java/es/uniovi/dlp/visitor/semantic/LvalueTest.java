@@ -1,5 +1,6 @@
 package es.uniovi.dlp.visitor.semantic;
 
+
 import static es.uniovi.dlp.TestHelpers.runCompiler;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,6 +10,15 @@ import es.uniovi.dlp.error.ErrorReason;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static es.uniovi.dlp.TestHelpers.assertFoundErrors;
+import static es.uniovi.dlp.TestHelpers.runCompiler;
+
+import es.uniovi.dlp.error.Error;
+import es.uniovi.dlp.error.ErrorReason;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 public class LvalueTest {
@@ -31,8 +41,10 @@ public class LvalueTest {
     assertFoundErrors(new ArrayList<>());
   }
 
+
   private static void assertFoundErrors(List<Error> errors) {
     var foundErrors = ErrorManager.getInstance().getErrors();
     assertIterableEquals(foundErrors, errors);
   }
+
 }
