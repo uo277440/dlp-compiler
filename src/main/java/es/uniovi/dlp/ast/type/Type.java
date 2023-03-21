@@ -1,3 +1,7 @@
 package es.uniovi.dlp.ast.type;
 
-public interface Type {}
+import es.uniovi.dlp.ast.ASTNode;
+
+public interface Type extends ASTNode {
+
+}

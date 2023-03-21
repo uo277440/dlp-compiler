@@ -3,9 +3,9 @@ package es.uniovi.dlp.visitor;
 import es.uniovi.dlp.ast.expression.*;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.Program;
-import es.uniovi.dlp.ast.statement.Assignment;
-import es.uniovi.dlp.ast.statement.Read;
-import es.uniovi.dlp.ast.statement.Statement;
+import es.uniovi.dlp.ast.program.VarDefinition;
+import es.uniovi.dlp.ast.statement.*;
+import es.uniovi.dlp.ast.type.*;
 
 public abstract class AbstractVisitor<ReturnType, ParamType>
     implements Visitor<ReturnType, ParamType> {
@@ -13,6 +13,11 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   @Override
   public ReturnType visit(Program program, ParamType param) {
     program.getDefinitions().forEach(definition -> definition.accept(this, param));
+    return null;
+  }
+  @Override
+  public ReturnType visit(VarDefinition vd, ParamType param) {
+    vd.getType().accept(this,param);
     return null;
   }
   @Override
@@ -102,6 +107,67 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   @Override
   public ReturnType visit(UnaryMinus um, ParamType param) {
     um.getExpression().accept(this,param);
+    return null;
+  }
+
+  @Override
+  public ReturnType visit(Int i, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(Char c, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(DoubleType d, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(If i, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(Write w, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(While w, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(Return r, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(Array d, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(FunctionType d, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(Struct d, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(StructField d, ParamType param) {
+
+    return null;
+  }
+  @Override
+  public ReturnType visit(VoidType d, ParamType param) {
+
     return null;
   }
 }
