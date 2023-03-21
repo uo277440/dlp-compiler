@@ -7,6 +7,7 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class FunctionDefinition extends AbstractASTNode implements Definition {
+  private int scope = 0 ;
   public FunctionType getType() {
     return type;
   }
@@ -19,8 +20,19 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
     return statements;
   }
 
+  @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  public int getScope() {
+    return scope;
+  }
+
+  @Override
+  public void setScope(int scope) {
+    this.scope=scope;
   }
 
   private FunctionType type;

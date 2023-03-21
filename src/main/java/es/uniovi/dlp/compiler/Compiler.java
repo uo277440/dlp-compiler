@@ -22,10 +22,8 @@ public class Compiler {
   public void run() throws IOException {
     ErrorManager.getInstance().clearErrors();
     program = parse(filename);
-<<<<<<< HEAD
-=======
+
     assignScope();
->>>>>>> upstream/main
     assignType();
     checkErrors();
   }
@@ -54,23 +52,20 @@ public class Compiler {
     return parser.program().ast;
   }
 
-<<<<<<< HEAD
+
   private void assignType() {
     TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
     typeCheckingVisitor.visit(program, null);
   }
 
-=======
+
   private void assignScope() {
     // Run here your IdentificationVisitor
   }
 
-  private void assignType() {
-    TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
-    typeCheckingVisitor.visit(program, null);
-  }
 
->>>>>>> upstream/main
+
+
   public void setReportErrors(boolean reportErrors) {
     this.reportErrors = reportErrors;
   }

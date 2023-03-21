@@ -72,7 +72,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(Indexing id, Type parameters) {
-        id.getIndexes().forEach(index -> index.accept(this, parameters));
+        id.getIndex().accept(this,parameters);
         id.setLvalue(true);
         return null;
     }

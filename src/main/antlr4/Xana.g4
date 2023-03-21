@@ -34,12 +34,9 @@ expression returns [Expression ast]
     | REAL_CONSTANT {$ast = new RealConstant($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1,LexerHelper.lexemeToReal($REAL_CONSTANT.getText()));}
     | CHAR_CONSTANT {$ast = new CharConstant($start.getLine(),$start.getCharPositionInLine() + 1,LexerHelper.lexemeToChar($CHAR_CONSTANT.getText()));}
     | '('expression')'{$ast= $expression.ast;}
-    | left=expression('['rr+=expression']')+ {
-    var indexes = new ArrayList<Expression>();
-    for(var r:$rr){
-    indexes.add(r.ast);
-    }
-    $ast = new Indexing($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,indexes);
+    | left=expression'['e=expression']' {
+
+    $ast = new Indexing($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$e.ast);
     }
     |left=expression'.'idR=ID {$ast = new FieldAccess($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$idR.getText());}
     |ex=expression'as'st=simple_type {$ast = new Cast($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast,$st.ast);}

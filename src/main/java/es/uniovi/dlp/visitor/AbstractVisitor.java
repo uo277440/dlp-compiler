@@ -79,7 +79,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   }
   @Override
   public ReturnType visit(Indexing indexing, ParamType param) {
-    indexing.getIndexes().forEach(index -> index.accept(this, param));
+    indexing.getIndex().accept(this,param);
     return null;
   }
   @Override

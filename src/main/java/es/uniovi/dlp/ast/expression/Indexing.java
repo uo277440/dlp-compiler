@@ -10,16 +10,16 @@ public class Indexing extends AbstractExpression {
 
   private Expression name;
 
-  public List<Expression> getIndexes() {
-    return indexes;
+  public Expression getIndex() {
+    return index;
   }
 
-  private List<Expression> indexes;
+  private Expression index;
 
-  public Indexing(int line, int column, Expression name, List<Expression> index) {
+  public Indexing(int line, int column, Expression name, Expression index) {
     super(line, column);
     this.name = name;
-    this.indexes = index;
+    this.index = index;
     this.setLvalue(true);
   }
 

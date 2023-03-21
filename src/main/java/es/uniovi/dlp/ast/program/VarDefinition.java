@@ -6,6 +6,7 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class VarDefinition extends AbstractASTNode implements Definition {
   private String name;
+  private int scope = 0 ;
 
   Type type;
 
@@ -19,7 +20,7 @@ public class VarDefinition extends AbstractASTNode implements Definition {
   public Type getType() {
     return type;
   }
-
+  @Override
   public String getName() {
     return name;
   }
@@ -28,5 +29,12 @@ public class VarDefinition extends AbstractASTNode implements Definition {
   @Override
   public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this,param);
+  }
+
+  public int getScope() {
+    return scope;
+  }
+  public void setScope(int scope){
+    this.scope=scope;
   }
 }
