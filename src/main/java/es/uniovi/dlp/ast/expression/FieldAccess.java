@@ -19,6 +19,7 @@ public class FieldAccess extends AbstractExpression {
     this.field = left;
     this.atributte = rightF;
     this.setLvalue(true);
+
   }
 
   @Override

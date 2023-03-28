@@ -35,4 +35,10 @@ public class Struct extends AbstractType {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+  @Override
+  public boolean allowDot(){
+    return true;
+  }
+
 }

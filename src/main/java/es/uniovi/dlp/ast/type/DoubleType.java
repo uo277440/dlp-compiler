@@ -13,4 +13,19 @@ public class DoubleType extends AbstractType {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+  @Override
+  public Type arithmetic(Type type){
+    if(type instanceof DoubleType || type instanceof Int || type instanceof Char){
+      return this;
+    }
+    return null;
+  }
+  @Override
+  public boolean allowDot(){
+    return false;
+  }
+  @Override
+  public boolean isArithmetic(){
+    return true;
+  }
 }

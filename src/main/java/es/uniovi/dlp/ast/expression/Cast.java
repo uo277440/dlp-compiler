@@ -8,18 +8,18 @@ public class Cast extends AbstractExpression {
     return left;
   }
 
-  public Type getType() {
-    return type;
-  }
+
+
 
   private Expression left;
-  private Type type;
+  private Type castToType;
 
   public Cast(int line, int column, Expression left, Type type) {
     super(line, column);
     this.left = left;
-    this.type = type;
+    this.castToType = type;
     this.setLvalue(false);
+
   }
 
   @Override

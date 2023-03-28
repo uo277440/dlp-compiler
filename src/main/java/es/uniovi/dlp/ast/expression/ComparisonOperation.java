@@ -1,9 +1,12 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.type.Int;
+import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class ComparisonOperation extends AbstractExpression {
   private String op;
+  Type type;
 
   public String getOp() {
     return op;
@@ -27,6 +30,7 @@ public class ComparisonOperation extends AbstractExpression {
     this.rightExpression = rightExpression;
     this.op = op;
     this.setLvalue(false);
+
   }
 
   @Override
@@ -34,6 +38,7 @@ public class ComparisonOperation extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this,param);
   }
+
 
 
 }

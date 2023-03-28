@@ -1,10 +1,13 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class ArithmeticOperation extends AbstractExpression {
   private String op;
   private Expression leftExpression;
+
+
 
   public String getOp() {
     return op;
@@ -26,6 +29,8 @@ public class ArithmeticOperation extends AbstractExpression {
     this.leftExpression = leftExpression;
     this.rightExpression = rightExpression;
     this.op = op;
+    this.setLvalue(false);
+
 
   }
 
@@ -34,6 +39,7 @@ public class ArithmeticOperation extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this,param);
   }
+
 
 
 }

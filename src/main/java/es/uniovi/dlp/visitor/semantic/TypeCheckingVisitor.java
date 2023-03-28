@@ -4,6 +4,7 @@ package es.uniovi.dlp.visitor.semantic;
 import es.uniovi.dlp.ast.expression.*;
 import es.uniovi.dlp.ast.statement.Assignment;
 import es.uniovi.dlp.ast.statement.Read;
+import es.uniovi.dlp.ast.type.ErrorType;
 import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.ast.type.VoidType;
 import es.uniovi.dlp.error.ErrorManager;
@@ -35,16 +36,20 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(ArithmeticOperation a, Type parameters) {
-        a.getRightExpression().accept(this,parameters);
-        a.getLeftExpression().accept(this,parameters);
-        a.setLvalue(false);
+        super.visit(a,parameters);
+        var left=a.getLeftExpression().getType();
+        var right=a.getRightExpression().getType();
+        a.setType(left.arithmetic(right));
+        if(a.getType()==null){
+            a.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(a.getLine(),a.getColumn(),ErrorReason.INVALID_ARITHMETIC));
+        }
         return null;
     }
     @Override
     public VoidType visit(Cast c, Type parameters) {
-        c.getLeft().accept(this,parameters);
-        c.getType().accept(this,parameters);
-        c.setLvalue(false);
+        super.visit(c,parameters);
+        c.setType(c.getType());
         return null;
     }
     @Override

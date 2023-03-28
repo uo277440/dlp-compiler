@@ -17,4 +17,10 @@ public class Array extends AbstractType {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+  @Override
+  public boolean allowDot(){
+    return true;
+  }
+
 }

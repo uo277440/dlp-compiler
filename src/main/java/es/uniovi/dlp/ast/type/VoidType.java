@@ -12,4 +12,6 @@ public class VoidType extends AbstractType {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
+
 }

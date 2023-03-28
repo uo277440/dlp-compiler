@@ -1,5 +1,7 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.type.Char;
+import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class CharConstant extends AbstractExpression {
@@ -9,10 +11,12 @@ public class CharConstant extends AbstractExpression {
 
   char value;
 
+
   public CharConstant(int line, int column, char value) {
     super(line, column);
     this.value = value;
     this.setLvalue(false);
+
   }
 
   @Override

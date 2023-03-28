@@ -46,8 +46,6 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
     var definition = st.find(variable.getName());
     if(definition==null){
         ErrorManager.getInstance().addError(new Error(variable.getLine(),variable.getColumn(),ErrorReason.FUNCTION_NOT_DECLARED));
-        in.getArguments().forEach(arg -> arg.accept(this,param));
-        return null;
     }
         return super.visit(in,param);
 
