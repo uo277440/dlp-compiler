@@ -21,10 +21,7 @@ public class Char extends AbstractType {
     }
     return null;
   }
-  @Override
-  public boolean allowDot(){
-    return false;
-  }
+
   @Override
   public boolean isArithmetic(){
     return true;
@@ -32,5 +29,22 @@ public class Char extends AbstractType {
 
   public static Char getInstance() {
     return instance;
+  }
+  @Override
+  public Type casteable(Type t){
+    if(t instanceof Int){
+      return Int.getInstance();
+    }
+    if(t instanceof Char){
+      return this;
+    }
+    return super.casteable(t);
+  }
+  @Override
+  public Type comparisson(Type t){
+    if(t instanceof Int || t instanceof Char || t instanceof DoubleType){
+      return t;
+    }
+    return super.comparisson(t);
   }
 }

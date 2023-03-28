@@ -13,6 +13,11 @@ public class Id extends AbstractExpression {
   }
 
   private String name;
+
+  public void setDefinition(Definition definition) {
+    this.definition = definition;
+  }
+
   private Definition definition;
 
   public Id(int line, int column, String name) {

@@ -16,7 +16,7 @@ public class CharConstant extends AbstractExpression {
     super(line, column);
     this.value = value;
     this.setLvalue(false);
-
+    this.setType(Char.getInstance());
   }
 
   @Override

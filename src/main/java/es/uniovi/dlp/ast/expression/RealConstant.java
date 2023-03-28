@@ -1,5 +1,6 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.type.DoubleType;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class RealConstant extends AbstractExpression {
@@ -9,6 +10,7 @@ public class RealConstant extends AbstractExpression {
     super(line, column);
     this.value = value;
     this.setLvalue(false);
+    this.setType(DoubleType.getInstance());
   }
 
   @Override

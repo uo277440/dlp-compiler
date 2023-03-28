@@ -13,10 +13,7 @@ public class ErrorType extends AbstractType{
         return null;
     }
 
-    @Override
-    public boolean allowDot() {
-        return false;
-    }
+
 
     @Override
     public boolean isArithmetic() {

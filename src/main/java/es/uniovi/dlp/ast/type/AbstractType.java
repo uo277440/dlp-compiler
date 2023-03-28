@@ -15,11 +15,50 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     return null;
   }
   @Override
-  public boolean allowDot(){
-    return false;
+  public Type allowDot(String name){
+
+    return null;
   }
   @Override
   public boolean isArithmetic(){
+    return false;
+  }
+
+  @Override
+  public Type casteable(Type t){
+
+    if(t instanceof ErrorType){
+      return t;
+    }
+    return null;
+  }
+  @Override
+  public boolean isIndexable(){
+    return false;
+  }
+  @Override
+  public Type logical(Type t){
+    if(t instanceof ErrorType){
+      return t;
+    }
+    return null;
+  }
+  @Override
+  public Type comparisson(Type t){
+    if(t instanceof ErrorType){
+      return t;
+    }
+    return null;
+  }
+  @Override
+  public Type squareBrackets(Type t){
+    if(t instanceof ErrorType){
+      return t;
+    }
+    return null;
+  }
+  @Override
+  public boolean isLogical(){
     return false;
   }
 

@@ -4,13 +4,14 @@ import es.uniovi.dlp.ast.ASTNode;
 
 public interface Type extends ASTNode {
 Type arithmetic(Type type);
-boolean allowDot();
+Type allowDot(String name);
 boolean isArithmetic();
 
-Type casteable();
-Type logical();
-Type comparisson();
-Type indexing();
+Type casteable(Type t);
+Type logical(Type t);
+Type comparisson(Type t);
+Type squareBrackets(Type t);
 boolean isIndexable();
+boolean isLogical();
 
 }

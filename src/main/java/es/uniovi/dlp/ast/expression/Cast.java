@@ -12,6 +12,11 @@ public class Cast extends AbstractExpression {
 
 
   private Expression left;
+
+  public Type getCastToType() {
+    return castToType;
+  }
+
   private Type castToType;
 
   public Cast(int line, int column, Expression left, Type type) {
@@ -27,6 +32,7 @@ public class Cast extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this,param);
   }
+
 
 
 

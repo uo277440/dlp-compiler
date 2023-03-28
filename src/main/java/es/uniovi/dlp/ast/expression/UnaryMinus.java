@@ -13,6 +13,7 @@ public class UnaryMinus extends AbstractExpression {
     super(line, column);
     this.expression = ex;
     this.setLvalue(false);
+
   }
 
   @Override

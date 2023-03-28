@@ -17,6 +17,7 @@ public class VarDefinition extends AbstractASTNode implements Definition {
     this.type = type;
   }
 
+  @Override
   public Type getType() {
     return type;
   }

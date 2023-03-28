@@ -4,11 +4,11 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Array extends AbstractType {
   private int size;
-  private Type type;
+  private Type typeArray;
 
   public Array(int line, int column, Type type, int size) {
     super(line, column);
-    this.type = type;
+    this.typeArray = type;
     this.size = size;
   }
 
@@ -18,9 +18,14 @@ public class Array extends AbstractType {
     return null;
   }
 
-  @Override
-  public boolean allowDot(){
-    return true;
-  }
+
+
+@Override
+  public Type squareBrackets(Type t){
+    if(t instanceof Int){
+      return typeArray;
+    }
+  return super.squareBrackets(t);
+}
 
 }

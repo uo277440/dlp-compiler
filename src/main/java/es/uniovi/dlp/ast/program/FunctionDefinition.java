@@ -8,6 +8,7 @@ import java.util.List;
 
 public class FunctionDefinition extends AbstractASTNode implements Definition {
   private int scope = 0 ;
+  @Override
   public FunctionType getType() {
     return type;
   }

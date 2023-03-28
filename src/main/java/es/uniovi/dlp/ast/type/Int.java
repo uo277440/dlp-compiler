@@ -23,10 +23,7 @@ private static Int instance= new Int(0,0);
     }
     return null;
   }
-  @Override
-  public boolean allowDot(){
-    return false;
-  }
+
   @Override
   public boolean isArithmetic(){
     return true;
@@ -36,5 +33,41 @@ private static Int instance= new Int(0,0);
   public static Int getInstance() {
     return instance;
   }
+
+  @Override
+  public Type casteable(Type t){
+    if(t instanceof DoubleType){
+      return t;
+    }
+    if(t instanceof Char){
+      return t;
+    }
+    if(t instanceof Int){
+      return this;
+    }
+    return super.casteable(t);
+  }
+  public boolean isIndexable(){
+    return true;
+  }
+  @Override
+  public Type comparisson(Type t){
+    if(t instanceof Int || t instanceof Char || t instanceof DoubleType){
+      return t;
+    }
+    return super.comparisson(t);
+  }
+  @Override
+  public Type logical(Type t){
+    if(t instanceof Int ){
+      return t;
+    }
+    return super.logical(t);
+  }
+@Override
+  public boolean isLogical(){
+    return true;
+}
+
 
 }

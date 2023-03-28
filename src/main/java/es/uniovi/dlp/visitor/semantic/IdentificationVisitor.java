@@ -5,6 +5,7 @@ import es.uniovi.dlp.ast.expression.Invocation;
 import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.VarDefinition;
+import es.uniovi.dlp.ast.type.ErrorType;
 import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.ast.type.VoidType;
@@ -54,10 +55,13 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(Id id, Type param) {
         var variable = id.getName();
-        if(st.find(variable)==null){
-            ErrorManager.getInstance().addError(new Error(id.getLine(),id.getColumn(),ErrorReason.VARIABLE_NOT_DECLARED));
 
+        if(st.find(variable)==null){
+
+            ErrorManager.getInstance().addError(new Error(id.getLine(),id.getColumn(),ErrorReason.VARIABLE_NOT_DECLARED));
+            id.setDefinition(new VarDefinition(id.getLine(),id.getColumn(),"",new ErrorType(id.getLine(),id.getColumn())));
         }
+        id.setDefinition(st.find(variable));
         return null;
 
     }

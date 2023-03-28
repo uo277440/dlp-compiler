@@ -6,6 +6,9 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 public class StructField implements ASTNode {
 
   private String name;
+
+
+
   private Type type;
 
   private int line;
@@ -36,5 +39,8 @@ public class StructField implements ASTNode {
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
+  }
+  public Type getType() {
+    return type;
   }
 }

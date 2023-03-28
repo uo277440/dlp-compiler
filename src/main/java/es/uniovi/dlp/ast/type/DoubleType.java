@@ -3,6 +3,7 @@ package es.uniovi.dlp.ast.type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class DoubleType extends AbstractType {
+  private static DoubleType instance= new DoubleType(0,0);
 
   public DoubleType(int line, int column) {
     super(line, column);
@@ -20,12 +21,26 @@ public class DoubleType extends AbstractType {
     }
     return null;
   }
-  @Override
-  public boolean allowDot(){
-    return false;
-  }
+
   @Override
   public boolean isArithmetic(){
     return true;
+  }
+  @Override
+  public Type casteable(Type t){
+    if(t instanceof DoubleType || t instanceof Int){
+      return this;
+    }
+    return super.casteable(t);
+  }
+  public static DoubleType getInstance() {
+    return instance;
+  }
+  @Override
+  public Type comparisson(Type t){
+    if(t instanceof Int || t instanceof Char || t instanceof DoubleType){
+      return t;
+    }
+    return super.comparisson(t);
   }
 }

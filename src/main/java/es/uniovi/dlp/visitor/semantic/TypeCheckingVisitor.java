@@ -49,12 +49,18 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public VoidType visit(Cast c, Type parameters) {
         super.visit(c,parameters);
-        c.setType(c.getType());
+        var left = c.getLeft().getType();
+        c.setType(left.casteable(c.getCastToType()));
+        if(c.getType()==null){
+            c.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(c.getLine(),c.getColumn(),ErrorReason.INVALID_CAST));
+        }
         return null;
     }
     @Override
     public VoidType visit(CharConstant c, Type parameters) {
         c.setLvalue(false);
+
         return null;
     }
     @Override
@@ -66,18 +72,27 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(FieldAccess f, Type parameters) {
-        f.getField().accept(this,parameters);
+        super.visit(f,parameters);
+        var exp = f.getField().getType();
+        f.setType(exp.allowDot(f.getAtributte()));
+        if(f.getType()==null){
+            f.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(f.getLine(),f.getColumn(),ErrorReason.NO_SUCH_FIELD));
+        }
         f.setLvalue(true);
         return null;
     }
     @Override
     public VoidType visit(Id id, Type parameters) {
         id.setLvalue(true);
+        id.setType(id.getDefinition().getType());
         return null;
     }
     @Override
     public VoidType visit(Indexing id, Type parameters) {
-        id.getIndex().accept(this,parameters);
+        super.visit(id,parameters);
+        var exp = id.getIndex().getType();
+       // id.setType(exp.squareBrackets(id.get));
         id.setLvalue(true);
         return null;
     }
@@ -90,14 +105,30 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public VoidType visit(LogicOperation lo, Type parameters) {
-       lo.getRightExpression().accept(this,parameters);
-        lo.getLeftExpression().accept(this,parameters);
+       super.visit(lo,parameters);
         lo.setLvalue(false);
+        var left = lo.getLeftExpression().getType();
+        var right = lo.getRightExpression().getType();
+        lo.setType(left.logical(right));
+        if(lo.getType()==null){
+            lo.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(lo.getLine(),lo.getColumn(),ErrorReason.INVALID_LOGICAL));
+        }
         return null;
     }
     @Override
     public VoidType visit(Not n, Type parameters) {
-        n.getExpression().accept(this,parameters);
+        super.visit(n,parameters);
+        var exp = n.getExpression().getType();
+        if(exp.isLogical())
+            n.setType(exp);
+        else
+            n.setType(null);
+        if(n.getType()==null){
+            n.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(n.getLine(),n.getColumn(),ErrorReason.NOT_LOGICAL));
+        }
+
         n.setLvalue(false);
         return null;
     }
@@ -108,9 +139,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(UnaryMinus um, Type parameters) {
-        um.getExpression().accept(this,parameters);
-        um.setLvalue(false);
+        super.visit(um,parameters);
+       if(!um.getExpression().getType().isArithmetic()){
+           um.setType(ErrorType.getInstance());
+           ErrorManager.getInstance().addError(new Error(um.getLine(),um.getColumn(),ErrorReason.INVALID_ARITHMETIC));
+       }
+
         return null;
     }
+
 }
 
