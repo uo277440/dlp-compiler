@@ -9,14 +9,14 @@ public class Invocation extends AbstractExpression implements Statement {
     return arguments;
   }
 
-  public Expression getName() {
+  public Id getName() {
     return name;
   }
 
   private List<Expression> arguments;
-  Expression name;
+  Id name;
 
-  public Invocation(int line, int column, List<Expression> args, Expression left) {
+  public Invocation(int line, int column, List<Expression> args, Id left) {
 
     super(line, column);
     this.arguments = args;

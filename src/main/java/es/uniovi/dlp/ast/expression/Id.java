@@ -4,6 +4,14 @@ import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Id extends AbstractExpression {
+  public String getName() {
+    return name;
+  }
+
+  public Definition getDefinition() {
+    return definition;
+  }
+
   private String name;
   private Definition definition;
 

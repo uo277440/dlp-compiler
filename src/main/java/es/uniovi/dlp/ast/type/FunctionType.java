@@ -5,6 +5,14 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class FunctionType extends AbstractType {
+  public List<VarDefinition> getParams() {
+    return params;
+  }
+
+  public Type getReturnType() {
+    return returnType;
+  }
+
   private List<VarDefinition> params;
   private Type returnType;
 
@@ -18,6 +26,6 @@ public class FunctionType extends AbstractType {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return null;
+    return visitor.visit(this,param);
   }
 }

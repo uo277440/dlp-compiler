@@ -4,6 +4,7 @@ import es.uniovi.dlp.ast.program.Program;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.parser.XanaLexer;
 import es.uniovi.dlp.parser.XanaParser;
+import es.uniovi.dlp.visitor.semantic.IdentificationVisitor;
 import es.uniovi.dlp.visitor.semantic.TypeCheckingVisitor;
 import java.io.IOException;
 import org.antlr.v4.runtime.CharStream;
@@ -61,6 +62,8 @@ public class Compiler {
 
   private void assignScope() {
     // Run here your IdentificationVisitor
+    IdentificationVisitor iv = new IdentificationVisitor();
+    iv.visit(program,null);
   }
 
 

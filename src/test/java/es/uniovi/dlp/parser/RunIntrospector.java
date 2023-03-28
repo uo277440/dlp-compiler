@@ -12,7 +12,7 @@ public class RunIntrospector {
 
   public static void main(String... args) throws IOException {
 
-    CharStream input = CharStreams.fromFileName("examples/basic.xana");
+    CharStream input = CharStreams.fromFileName("examples/errors/identification/missing_function_declaration.xana");
     XanaLexer lexer = new XanaLexer(input);
 
     CommonTokenStream tokens = new CommonTokenStream(lexer);

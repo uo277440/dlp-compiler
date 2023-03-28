@@ -156,7 +156,8 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   }
   @Override
   public ReturnType visit(FunctionType d, ParamType param) {
-
+    d.getReturnType().accept(this,param);
+    d.getParams().forEach(p -> p.accept(this,param));
     return null;
   }
   @Override

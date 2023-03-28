@@ -82,13 +82,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         il.setLvalue(false);
         return null;
     }
-    @Override
-    public VoidType visit(Invocation in, Type parameters) {
-        in.getArguments().forEach(index -> index.accept(this, parameters));
 
-        in.setLvalue(false);
-        return null;
-    }
     @Override
     public VoidType visit(LogicOperation lo, Type parameters) {
        lo.getRightExpression().accept(this,parameters);

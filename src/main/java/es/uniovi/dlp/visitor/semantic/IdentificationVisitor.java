@@ -1,5 +1,6 @@
 package es.uniovi.dlp.visitor.semantic;
 
+import es.uniovi.dlp.ast.expression.Id;
 import es.uniovi.dlp.ast.expression.Invocation;
 import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
@@ -19,7 +20,8 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
         if(!st.insert(vd)){
             ErrorManager.getInstance().addError(new Error(vd.getLine(),vd.getColumn(), ErrorReason.VARIABLE_ALREADY_DECLARED));
         }
-        vd.getType().accept(this,param);
+        //vd.getType().accept(this,param);
+        super.visit(vd,param);
         return null;
 
     }
@@ -30,19 +32,38 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
             ErrorManager.getInstance().addError(new Error(fd.getLine(),fd.getColumn(), ErrorReason.FUNCTION_ALREADY_DECLARED));
         }
         st.set();
-        fd.getType().accept(this,param);
-        fd.getBodyDefs().forEach(index -> index.accept(this, param));
-        fd.getStatements().forEach(index -> index.accept(this, param));
+        super.visit(fd,param);
+        //fd.getType().accept(this,param);
+        //fd.getBodyDefs().forEach(index -> index.accept(this, param));
+        //fd.getStatements().forEach(index -> index.accept(this, param));
         st.reset();
         return null;
 
     }
     @Override
-    public VoidType visit(Invocation fd, Type param) {
+    public Type visit(Invocation in, Type param) {
+    var variable = in.getName();
+    var definition = st.find(variable.getName());
+    if(definition==null){
+        ErrorManager.getInstance().addError(new Error(variable.getLine(),variable.getColumn(),ErrorReason.FUNCTION_NOT_DECLARED));
+        in.getArguments().forEach(arg -> arg.accept(this,param));
+        return null;
+    }
+        return super.visit(in,param);
 
+    }
+
+    @Override
+    public Type visit(Id id, Type param) {
+        var variable = id.getName();
+        if(st.find(variable)==null){
+            ErrorManager.getInstance().addError(new Error(id.getLine(),id.getColumn(),ErrorReason.VARIABLE_NOT_DECLARED));
+
+        }
         return null;
 
     }
+
 
 
 }
