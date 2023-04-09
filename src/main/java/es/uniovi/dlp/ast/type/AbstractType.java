@@ -33,6 +33,14 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     return null;
   }
   @Override
+  public Type asignable(Type t){
+
+    if(t instanceof ErrorType){
+      return t;
+    }
+    return null;
+  }
+  @Override
   public boolean isIndexable(){
     return false;
   }

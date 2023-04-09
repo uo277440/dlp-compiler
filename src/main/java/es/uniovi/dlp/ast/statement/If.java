@@ -7,6 +7,19 @@ import java.util.List;
 public class If extends AbstractStatement {
   private Expression condition;
   private List<Statement> body;
+
+  public Expression getCondition() {
+    return condition;
+  }
+
+  public List<Statement> getBody() {
+    return body;
+  }
+
+  public List<Statement> getElseBody() {
+    return elseBody;
+  }
+
   private List<Statement> elseBody;
 
   public If(
@@ -20,6 +33,7 @@ public class If extends AbstractStatement {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return null;
+    return visitor.visit(this,param);
+
   }
 }

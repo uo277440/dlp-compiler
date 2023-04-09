@@ -1,5 +1,6 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.ast.statement.Statement;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
@@ -16,6 +17,15 @@ public class Invocation extends AbstractExpression implements Statement {
   private List<Expression> arguments;
   Id name;
 
+  public Definition getDefinition() {
+    return definition;
+  }
+
+  public void setDefinition(Definition definition) {
+    this.definition = definition;
+  }
+
+  Definition definition;
   public Invocation(int line, int column, List<Expression> args, Id left) {
 
     super(line, column);

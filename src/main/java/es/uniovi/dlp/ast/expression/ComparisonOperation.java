@@ -30,6 +30,7 @@ public class ComparisonOperation extends AbstractExpression {
     this.rightExpression = rightExpression;
     this.op = op;
     this.setLvalue(false);
+    this.setType(Int.getInstance());
 
   }
 

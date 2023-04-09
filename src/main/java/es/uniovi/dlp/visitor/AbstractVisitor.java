@@ -80,6 +80,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   @Override
   public ReturnType visit(Indexing indexing, ParamType param) {
     indexing.getIndex().accept(this,param);
+    indexing.getName().accept(this,param);
     return null;
   }
   @Override
@@ -131,22 +132,26 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   }
   @Override
   public ReturnType visit(If i, ParamType param) {
-
+    i.getCondition().accept(this,param);
+    i.getBody().forEach(p -> p.accept(this,param));
+    i.getElseBody().forEach(p -> p.accept(this,param));
     return null;
   }
   @Override
   public ReturnType visit(Write w, ParamType param) {
-
+    w.getBody().accept(this,param);
     return null;
   }
   @Override
   public ReturnType visit(While w, ParamType param) {
-
+    w.getCondition().accept(this,param);
+    w.getBody().forEach(p -> p.accept(this,param));
     return null;
   }
   @Override
   public ReturnType visit(Return r, ParamType param) {
 
+    r.getExpression().accept(this,param);
     return null;
   }
   @Override

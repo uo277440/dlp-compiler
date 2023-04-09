@@ -4,6 +4,7 @@ import static es.uniovi.dlp.TestHelpers.assertFoundErrors;
 import static es.uniovi.dlp.TestHelpers.runCompiler;
 
 import es.uniovi.dlp.error.Error;
+import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.error.ErrorReason;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ public class TypeCheckingTest {
             new Error(6, 20, ErrorReason.INVALID_INDEX_EXPRESSION),
             new Error(7, 19, ErrorReason.INVALID_INDEX_EXPRESSION),
             new Error(9, 10, ErrorReason.INVALID_INDEXING)));
+
   }
 
   @Test
@@ -53,6 +55,7 @@ public class TypeCheckingTest {
   @Test
   void invalidComparison() {
     runCompiler("examples/errors/types/invalid_comparison.xana");
+    var b=ErrorManager.getInstance().getErrors();
     assertFoundErrors(Arrays.asList(new Error(12, 15, ErrorReason.INVALID_COMPARISON)));
   }
 
@@ -100,6 +103,7 @@ public class TypeCheckingTest {
   @Test
   void severalErrors() {
     runCompiler("examples/errors/types/several_errors.xana");
+    var a =ErrorManager.getInstance().getErrors();
     assertFoundErrors(
         Arrays.asList(
             new Error(9, 5, ErrorReason.FIELD_ALREADY_DECLARED),

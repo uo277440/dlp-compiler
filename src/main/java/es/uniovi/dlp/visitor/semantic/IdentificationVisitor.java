@@ -46,8 +46,16 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
     var variable = in.getName();
     var definition = st.find(variable.getName());
     if(definition==null){
+
         ErrorManager.getInstance().addError(new Error(variable.getLine(),variable.getColumn(),ErrorReason.FUNCTION_NOT_DECLARED));
+        in.setDefinition(null);
+        in.setType(ErrorType.getInstance());
+        return super.visit(in,param);
+
+
     }
+        in.setDefinition(definition);
+        in.setType((in.getDefinition().getType()));
         return super.visit(in,param);
 
     }
@@ -59,9 +67,10 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
         if(st.find(variable)==null){
 
             ErrorManager.getInstance().addError(new Error(id.getLine(),id.getColumn(),ErrorReason.VARIABLE_NOT_DECLARED));
-            id.setDefinition(new VarDefinition(id.getLine(),id.getColumn(),"",new ErrorType(id.getLine(),id.getColumn())));
+            id.setDefinition(null);
         }
         id.setDefinition(st.find(variable));
+        id.setType(id.getDefinition().getType());
         return null;
 
     }

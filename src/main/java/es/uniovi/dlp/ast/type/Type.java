@@ -14,4 +14,6 @@ Type squareBrackets(Type t);
 boolean isIndexable();
 boolean isLogical();
 
+Type asignable(Type t);
+
 }

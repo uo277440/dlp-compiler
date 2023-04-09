@@ -1,5 +1,6 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.type.Int;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class UnaryMinus extends AbstractExpression {
@@ -13,6 +14,7 @@ public class UnaryMinus extends AbstractExpression {
     super(line, column);
     this.expression = ex;
     this.setLvalue(false);
+    this.setType(Int.getInstance());
 
   }
 

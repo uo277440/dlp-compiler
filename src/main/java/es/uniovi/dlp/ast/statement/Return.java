@@ -4,6 +4,10 @@ import es.uniovi.dlp.ast.expression.Expression;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Return extends AbstractStatement {
+  public Expression getExpression() {
+    return expression;
+  }
+
   private Expression expression;
 
   public Return(int line, int column, Expression expression) {
@@ -14,6 +18,6 @@ public class Return extends AbstractStatement {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return null;
+    return visitor.visit(this,param);
   }
 }

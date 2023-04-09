@@ -14,6 +14,11 @@ public class FunctionType extends AbstractType {
   }
 
   private List<VarDefinition> params;
+
+  public void setReturnType(Type returnType) {
+    this.returnType = returnType;
+  }
+
   private Type returnType;
 
   public FunctionType(int line, int column, List<VarDefinition> varDefs, Type rt) {

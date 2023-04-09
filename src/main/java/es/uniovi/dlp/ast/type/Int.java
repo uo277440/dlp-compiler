@@ -64,6 +64,16 @@ private static Int instance= new Int(0,0);
     }
     return super.logical(t);
   }
+  @Override
+  public Type asignable(Type t){
+    if(t instanceof Int){
+      return t;
+    }
+    if(t instanceof Char){
+      return t;
+    }
+    return super.asignable(t);
+  }
 @Override
   public boolean isLogical(){
     return true;

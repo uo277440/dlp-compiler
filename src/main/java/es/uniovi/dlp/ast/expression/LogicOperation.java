@@ -1,5 +1,6 @@
 package es.uniovi.dlp.ast.expression;
 
+import es.uniovi.dlp.ast.type.Int;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class LogicOperation extends AbstractExpression {
@@ -27,6 +28,7 @@ public class LogicOperation extends AbstractExpression {
     this.rightExpression = rightExpression;
     this.op = op;
     this.setLvalue(false);
+    this.setType(Int.getInstance());
   }
 
   @Override

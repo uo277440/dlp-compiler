@@ -29,7 +29,7 @@ public class DoubleType extends AbstractType {
   @Override
   public Type casteable(Type t){
     if(t instanceof DoubleType || t instanceof Int){
-      return this;
+      return t;
     }
     return super.casteable(t);
   }
@@ -42,5 +42,18 @@ public class DoubleType extends AbstractType {
       return t;
     }
     return super.comparisson(t);
+  }
+  @Override
+  public Type asignable(Type t){
+    if(t instanceof Int){
+      return t;
+    }
+    if(t instanceof DoubleType){
+      return t;
+    }
+    if(t instanceof Char){
+      return t;
+    }
+    return super.asignable(t);
   }
 }

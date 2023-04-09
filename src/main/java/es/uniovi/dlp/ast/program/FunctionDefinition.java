@@ -3,13 +3,15 @@ package es.uniovi.dlp.ast.program;
 import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.ast.statement.Statement;
 import es.uniovi.dlp.ast.type.FunctionType;
+import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class FunctionDefinition extends AbstractASTNode implements Definition {
   private int scope = 0 ;
+
   @Override
-  public FunctionType getType() {
+  public Type getType() {
     return type;
   }
 
@@ -36,7 +38,7 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
     this.scope=scope;
   }
 
-  private FunctionType type;
+  private Type type;
 
   private List<VarDefinition> bodyDefs;
 
@@ -49,7 +51,7 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
       String name,
       List<VarDefinition> bodyDefs,
       List<Statement> statements,
-      FunctionType type) {
+      Type type) {
     super(line, column);
     this.name = name;
     this.statements = statements;

@@ -47,4 +47,11 @@ public class Char extends AbstractType {
     }
     return super.comparisson(t);
   }
+  @Override
+  public Type asignable(Type t){
+    if(t instanceof Char){
+      return t;
+    }
+    return super.asignable(t);
+  }
 }

@@ -2,11 +2,10 @@ package es.uniovi.dlp.visitor.semantic;
 
 
 import es.uniovi.dlp.ast.expression.*;
-import es.uniovi.dlp.ast.statement.Assignment;
-import es.uniovi.dlp.ast.statement.Read;
-import es.uniovi.dlp.ast.type.ErrorType;
-import es.uniovi.dlp.ast.type.Type;
-import es.uniovi.dlp.ast.type.VoidType;
+import es.uniovi.dlp.ast.program.FunctionDefinition;
+import es.uniovi.dlp.ast.program.VarDefinition;
+import es.uniovi.dlp.ast.statement.*;
+import es.uniovi.dlp.ast.type.*;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.error.ErrorReason;
 import es.uniovi.dlp.visitor.AbstractVisitor;
@@ -15,13 +14,14 @@ import es.uniovi.dlp.error.Error;
 import java.lang.reflect.Field;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
+
     @Override
     public VoidType visit(Assignment a, Type parameters) {
-        a.getLeft().accept(this, parameters);
-        a.getRight().accept(this, parameters);
-        if(!a.getLeft().isLvalue())
-            ErrorManager.getInstance().addError(new Error(a.getLeft().getLine() ,a.getLeft().getColumn(),
-                    ErrorReason.LVALUE_REQUIRED));
+        super.visit(a,parameters);
+        if(a.getLeft().getType().asignable(a.getRight().getType())==null){
+            ErrorManager.getInstance().addError(new Error(a.getLine(),a.getColumn(),ErrorReason.INCOMPATIBLE_TYPES));
+
+        }
 
         return null;
     }
@@ -35,6 +35,67 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return null;
     }
     @Override
+    public VoidType visit(If i, Type parameters) {
+        super.visit(i,parameters);
+        if(i.getCondition() instanceof Invocation){
+            if(!(((FunctionType)i.getCondition().getType()).getReturnType().isLogical())){
+                ErrorManager.getInstance().addError(new Error(i.getCondition().getLine() ,i.getCondition().getColumn(),
+                        ErrorReason.NOT_LOGICAL));
+
+            }
+            return null;
+        }
+        if(!i.getCondition().getType().isLogical()){
+            ErrorManager.getInstance().addError(new Error(i.getCondition().getLine() ,i.getCondition().getColumn(),
+                    ErrorReason.NOT_LOGICAL));
+            }
+        return null;
+    }
+    @Override
+    public VoidType visit(While w, Type parameters) {
+        super.visit(w,parameters);
+        if(w.getCondition() instanceof Invocation){
+            if(!(((FunctionType)w.getCondition().getType()).getReturnType().isLogical())){
+                ErrorManager.getInstance().addError(new Error(w.getCondition().getLine() ,w.getCondition().getColumn(),
+                        ErrorReason.NOT_LOGICAL));
+
+            }
+            return null;
+        }
+        if(!w.getCondition().getType().isLogical()){
+            ErrorManager.getInstance().addError(new Error(w.getCondition().getLine() ,w.getCondition().getColumn(),
+                    ErrorReason.NOT_LOGICAL));
+        }
+        return null;
+
+
+    }
+    @Override
+    public VoidType visit(Invocation i, Type parameters) {
+        super.visit(i,parameters);
+        if(i.getDefinition() instanceof VarDefinition){
+            ErrorManager.getInstance().addError(new Error(i.getLine(),i.getColumn(),ErrorReason.INVALID_INVOCATION));
+            return null;
+        }
+        if(i.getType() instanceof ErrorType)
+            return null;
+        if(i.getType() instanceof FunctionType f){
+            if(i.getArguments().size() != f.getParams().size()){
+                ErrorManager.getInstance().addError(new Error(i.getLine(),i.getColumn(),ErrorReason.INVALID_ARGS));
+            }
+            for(var p : i.getArguments()){
+                for(var p2 : f.getParams()){
+                    if(p.getType().casteable(p2.getType())==null){
+                        ErrorManager.getInstance().addError(new Error(i.getLine(),i.getColumn(),ErrorReason.INVALID_ARGS));
+                    }
+                }
+            }
+        }
+
+    return null;
+    }
+
+    @Override
     public VoidType visit(ArithmeticOperation a, Type parameters) {
         super.visit(a,parameters);
         var left=a.getLeftExpression().getType();
@@ -46,6 +107,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         }
         return null;
     }
+
     @Override
     public VoidType visit(Cast c, Type parameters) {
         super.visit(c,parameters);
@@ -63,10 +125,19 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
         return null;
     }
+
+
+
     @Override
     public VoidType visit(ComparisonOperation c, Type parameters) {
-        c.getLeftExpression().accept(this,parameters);
-        c.getRightExpression().accept(this,parameters);
+        super.visit(c,parameters);
+        var left = c.getLeftExpression().getType();
+        var right = c.getRightExpression().getType();
+        //c.setType(left.comparisson(right));
+        if(left.comparisson(right)==null){
+            c.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(c.getLine(),c.getColumn(),ErrorReason.INVALID_COMPARISON));
+        }
         c.setLvalue(false);
         return null;
     }
@@ -85,15 +156,25 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public VoidType visit(Id id, Type parameters) {
         id.setLvalue(true);
-        id.setType(id.getDefinition().getType());
+
         return null;
     }
     @Override
     public VoidType visit(Indexing id, Type parameters) {
         super.visit(id,parameters);
         var exp = id.getIndex().getType();
-       // id.setType(exp.squareBrackets(id.get));
-        id.setLvalue(true);
+        var array = id.getName().getType();
+        if(!(array instanceof Array)){
+            id.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(id.getLine(),id.getColumn(),ErrorReason.INVALID_INDEXING));
+            return null;
+        }
+        id.setType(array.squareBrackets(exp));
+        if(id.getType()==null){
+            id.setType(ErrorType.getInstance());
+            ErrorManager.getInstance().addError(new Error(id.getIndex().getLine(),id.getIndex().getColumn(),ErrorReason.INVALID_INDEX_EXPRESSION));
+
+        }
         return null;
     }
     @Override
@@ -102,6 +183,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         il.setLvalue(false);
         return null;
     }
+
 
     @Override
     public VoidType visit(LogicOperation lo, Type parameters) {
@@ -126,7 +208,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
             n.setType(null);
         if(n.getType()==null){
             n.setType(ErrorType.getInstance());
-            ErrorManager.getInstance().addError(new Error(n.getLine(),n.getColumn(),ErrorReason.NOT_LOGICAL));
+            ErrorManager.getInstance().addError(new Error(n.getExpression().getLine(),n.getExpression().getColumn(),ErrorReason.NOT_LOGICAL));
         }
 
         n.setLvalue(false);
@@ -142,10 +224,34 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         super.visit(um,parameters);
        if(!um.getExpression().getType().isArithmetic()){
            um.setType(ErrorType.getInstance());
-           ErrorManager.getInstance().addError(new Error(um.getLine(),um.getColumn(),ErrorReason.INVALID_ARITHMETIC));
+           ErrorManager.getInstance().addError(new Error(um.getExpression().getLine(),um.getExpression().getColumn(),ErrorReason.INVALID_ARITHMETIC));
        }
 
         return null;
+    }
+    @Override
+    public VoidType visit(FunctionDefinition fd, Type param) {
+        fd.getType().accept(this, param);
+        fd.getBodyDefs().forEach(index -> index.accept(this, param));
+        fd.getStatements().forEach(index -> index.accept(this,((FunctionType)fd.getType()).getReturnType()));
+
+
+        return null;
+
+    }
+    @Override
+    public VoidType visit(Return rt, Type param) {
+        rt.getExpression().accept(this,param);
+        if(rt.getExpression().getType().getClass()!=(param.getClass())){
+            ErrorManager.getInstance().addError(new Error(rt.getExpression().getLine(),rt.getExpression().getColumn(),ErrorReason.INVALID_RETURN_TYPE));
+
+        }
+       return null;
+
+    }
+
+    private boolean isErrorType(Type t){
+        return t instanceof ErrorType;
     }
 
 }

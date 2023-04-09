@@ -43,16 +43,16 @@ expression returns [Expression ast]
     | '-'ex=expression {$ast = new UnaryMinus($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     | '!' ex=expression {$ast = new Not($start.getLine(),$start.getCharPositionInLine() + 1,$ex.ast);}
     |left=expression op=('/'|'*'|'%') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
-    |left=expression op=('+'|'-') right=expression {$ast = new ArithmeticOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
-    | left=expression op=('>' | '<' | '!=' | '==' | '<=' | '>=') right=expression {$ast = new ComparisonOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
-    | left=expression op=('&&' | '||') right=expression {$ast = new LogicOperation($start.getLine(),$start.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    |left=expression op=('+'|'-') right=expression {$ast = new ArithmeticOperation($op.getLine(),$op.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    | left=expression op=('>' | '<' | '!=' | '==' | '<=' | '>=') right=expression {$ast = new ComparisonOperation($op.getLine(),$op.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
+    | left=expression op=('&&' | '||') right=expression {$ast = new LogicOperation($op.getLine(),$op.getCharPositionInLine() + 1,$left.ast,$op.getText(),$right.ast);}
     | invocation {$ast = $invocation.ast;}
 
     ;
 
 
 main_func returns [FunctionDefinition ast]
-:DEF name=MAIN'('')' DO (defs+=var_definition)*(sts+=statement)*END{
+:DEF name=MAIN'('')' DO ((defs+=var_definition) | (sts+=statement))*END{
 var definitions =new ArrayList<VarDefinition>();
 var statements=new ArrayList<Statement>();
 for(var d:$defs){
@@ -92,7 +92,7 @@ func_definition returns [FunctionDefinition ast]
 param returns [VarDefinition ast]
 :name=ID '::' tipo=simple_type{$ast = new VarDefinition($name.getLine(),$name.getCharPositionInLine() + 1,$name.getText(),$tipo.ast);};
 func_body returns [List<VarDefinition> defs= new ArrayList<>(),List<Statement> statements=new ArrayList<>()]
-:DO(vars+=var_definition)*(stmnts+=statement)*END{
+:DO ((vars+=var_definition) |  (stmnts+=statement))*END{
 var varDefs = new ArrayList<VarDefinition>();
 var sts = new ArrayList<Statement>();
 for(var def : $vars)

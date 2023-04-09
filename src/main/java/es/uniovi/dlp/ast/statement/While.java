@@ -6,6 +6,15 @@ import java.util.List;
 
 public class While extends AbstractStatement {
   private Expression condition;
+
+  public Expression getCondition() {
+    return condition;
+  }
+
+  public List<Statement> getBody() {
+    return body;
+  }
+
   private List<Statement> body;
 
   public While(int line, int column, Expression condition, List<Statement> body) {
@@ -17,6 +26,6 @@ public class While extends AbstractStatement {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return null;
+    return visitor.visit(this,param);
   }
 }
