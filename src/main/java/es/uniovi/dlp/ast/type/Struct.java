@@ -29,11 +29,11 @@ public class Struct extends AbstractType {
       names.add(field.getName());
     }
   }
+
   @Override
-  public Type allowDot(String name){
-    for (var field : fields){
-      if(field.getName().equals(name))
-        return field.getType();
+  public Type allowDot(String name) {
+    for (var field : fields) {
+      if (field.getName().equals(name)) return field.getType();
     }
 
     return null;
@@ -45,6 +45,8 @@ public class Struct extends AbstractType {
     return null;
   }
 
-
-
+  @Override
+  public boolean dot() {
+    return true;
+  }
 }

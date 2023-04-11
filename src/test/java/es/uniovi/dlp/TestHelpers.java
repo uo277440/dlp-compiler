@@ -1,8 +1,5 @@
 package es.uniovi.dlp;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import es.uniovi.dlp.compiler.Compiler;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -91,12 +88,10 @@ public class TestHelpers {
         });
   }
 
-
   public static void assertFoundErrors(List<Error> errors) {
     var foundErrors = ErrorManager.getInstance().getErrors();
     assertIterableEquals(errors, foundErrors);
   }
-
 
   public static void runCompiler(String file) {
     try {

@@ -1,7 +1,6 @@
 package es.uniovi.dlp.ast.expression;
 
 import es.uniovi.dlp.visitor.AbstractVisitor;
-import java.util.List;
 
 public class Indexing extends AbstractExpression {
   public Expression getName() {
@@ -26,8 +25,6 @@ public class Indexing extends AbstractExpression {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return visitor.visit(this,param);
+    return visitor.visit(this, param);
   }
-
-
 }

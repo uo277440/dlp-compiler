@@ -1,7 +1,6 @@
 package es.uniovi.dlp.ast.expression;
 
 import es.uniovi.dlp.ast.type.Char;
-import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class CharConstant extends AbstractExpression {
@@ -10,7 +9,6 @@ public class CharConstant extends AbstractExpression {
   }
 
   char value;
-
 
   public CharConstant(int line, int column, char value) {
     super(line, column);
@@ -22,9 +20,6 @@ public class CharConstant extends AbstractExpression {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return visitor.visit(this,param);
+    return visitor.visit(this, param);
   }
-
-
-
 }

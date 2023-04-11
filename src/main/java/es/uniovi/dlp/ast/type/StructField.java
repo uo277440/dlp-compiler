@@ -7,16 +7,14 @@ public class StructField implements ASTNode {
 
   private String name;
 
-
-
   private Type type;
 
   private int line;
   private int column;
 
   public StructField(String name, Type type, int line, int column) {
-   this.line=line;
-   this.column=column;
+    this.line = line;
+    this.column = column;
     this.name = name;
     this.type = type;
   }
@@ -40,6 +38,7 @@ public class StructField implements ASTNode {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
   public Type getType() {
     return type;
   }

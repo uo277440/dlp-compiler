@@ -2,7 +2,6 @@ package es.uniovi.dlp.visitor.semantic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 import es.uniovi.dlp.ast.program.VarDefinition;
 import org.junit.jupiter.api.Test;
 

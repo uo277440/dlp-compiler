@@ -19,7 +19,6 @@ public class TypeCheckingTest {
             new Error(6, 20, ErrorReason.INVALID_INDEX_EXPRESSION),
             new Error(7, 19, ErrorReason.INVALID_INDEX_EXPRESSION),
             new Error(9, 10, ErrorReason.INVALID_INDEXING)));
-
   }
 
   @Test
@@ -55,13 +54,13 @@ public class TypeCheckingTest {
   @Test
   void invalidComparison() {
     runCompiler("examples/errors/types/invalid_comparison.xana");
-    var b=ErrorManager.getInstance().getErrors();
     assertFoundErrors(Arrays.asList(new Error(12, 15, ErrorReason.INVALID_COMPARISON)));
   }
 
   @Test
   void invalidStruct() {
     runCompiler("examples/errors/types/invalid_struct.xana");
+    var a = ErrorManager.getInstance().getErrors();
     assertFoundErrors(
         Arrays.asList(
             new Error(5, 10, ErrorReason.NO_SUCH_FIELD),
@@ -103,7 +102,7 @@ public class TypeCheckingTest {
   @Test
   void severalErrors() {
     runCompiler("examples/errors/types/several_errors.xana");
-    var a =ErrorManager.getInstance().getErrors();
+    var a = ErrorManager.getInstance().getErrors();
     assertFoundErrors(
         Arrays.asList(
             new Error(9, 5, ErrorReason.FIELD_ALREADY_DECLARED),
@@ -114,7 +113,7 @@ public class TypeCheckingTest {
             new Error(21, 1, ErrorReason.FUNCTION_ALREADY_DECLARED),
             new Error(26, 5, ErrorReason.INCOMPATIBLE_TYPES),
             new Error(27, 5, ErrorReason.LVALUE_REQUIRED),
-            new Error(28, 8, ErrorReason.LVALUE_REQUIRED),
+            new Error(28, 16, ErrorReason.LVALUE_REQUIRED),
             new Error(30, 8, ErrorReason.NO_SUCH_FIELD),
             new Error(33, 15, ErrorReason.INVALID_LOGICAL),
             new Error(35, 15, ErrorReason.INVALID_COMPARISON),

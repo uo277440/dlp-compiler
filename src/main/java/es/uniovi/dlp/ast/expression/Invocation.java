@@ -26,6 +26,7 @@ public class Invocation extends AbstractExpression implements Statement {
   }
 
   Definition definition;
+
   public Invocation(int line, int column, List<Expression> args, Id left) {
 
     super(line, column);
@@ -37,8 +38,6 @@ public class Invocation extends AbstractExpression implements Statement {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return visitor.visit(this,param);
+    return visitor.visit(this, param);
   }
-
-
 }

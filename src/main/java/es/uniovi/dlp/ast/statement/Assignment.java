@@ -5,7 +5,6 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Assignment extends AbstractStatement {
 
-
   private Expression left;
   private Expression right;
 
@@ -18,9 +17,9 @@ public class Assignment extends AbstractStatement {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return visitor.visit(this,param);
-
+    return visitor.visit(this, param);
   }
+
   public Expression getLeft() {
     return left;
   }

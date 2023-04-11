@@ -19,14 +19,11 @@ public class FieldAccess extends AbstractExpression {
     this.field = left;
     this.atributte = rightF;
     this.setLvalue(true);
-
   }
 
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return visitor.visit(this,param);
+    return visitor.visit(this, param);
   }
-
-
 }

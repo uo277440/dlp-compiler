@@ -2,13 +2,12 @@ package es.uniovi.dlp.ast.program;
 
 import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.ast.statement.Statement;
-import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class FunctionDefinition extends AbstractASTNode implements Definition {
-  private int scope = 0 ;
+  private int scope = 0;
 
   @Override
   public Type getType() {
@@ -35,7 +34,7 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
 
   @Override
   public void setScope(int scope) {
-    this.scope=scope;
+    this.scope = scope;
   }
 
   private Type type;

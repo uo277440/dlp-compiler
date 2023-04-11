@@ -53,21 +53,16 @@ public class Compiler {
     return parser.program().ast;
   }
 
-
   private void assignType() {
     TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
     typeCheckingVisitor.visit(program, null);
   }
 
-
   private void assignScope() {
     // Run here your IdentificationVisitor
     IdentificationVisitor iv = new IdentificationVisitor();
-    iv.visit(program,null);
+    iv.visit(program, null);
   }
-
-
-
 
   public void setReportErrors(boolean reportErrors) {
     this.reportErrors = reportErrors;

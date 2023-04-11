@@ -26,10 +26,9 @@ public class Id extends AbstractExpression {
     this.setLvalue(true);
   }
 
-
   @Override
-  public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+  public <ReturnType, ParamType> ReturnType accept(
+      AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this, param);
-
   }
 }

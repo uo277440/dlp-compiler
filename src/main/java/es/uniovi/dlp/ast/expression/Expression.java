@@ -4,9 +4,11 @@ import es.uniovi.dlp.ast.ASTNode;
 import es.uniovi.dlp.ast.type.Type;
 
 public interface Expression extends ASTNode {
-boolean isLvalue();
-void setLvalue(boolean lvalue);
+  boolean isLvalue();
 
-Type getType();
-void setType(Type type);
+  void setLvalue(boolean lvalue);
+
+  Type getType();
+
+  void setType(Type type);
 }

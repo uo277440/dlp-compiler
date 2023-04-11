@@ -18,14 +18,11 @@ public class Array extends AbstractType {
     return null;
   }
 
-
-
-@Override
-  public Type squareBrackets(Type t){
-    if(t instanceof Int){
+  @Override
+  public Type squareBrackets(Type t) {
+    if (t instanceof Int) {
       return typeArray;
     }
-  return super.squareBrackets(t);
-}
-
+    return super.squareBrackets(t);
+  }
 }
