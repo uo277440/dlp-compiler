@@ -25,4 +25,8 @@ public class Array extends AbstractType {
     }
     return super.squareBrackets(t);
   }
+  @Override
+  public int getNumberOfBytes() {
+    return typeArray.getNumberOfBytes() * size;
+  }
 }

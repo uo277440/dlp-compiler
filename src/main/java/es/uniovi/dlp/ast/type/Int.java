@@ -96,4 +96,8 @@ public class Int extends AbstractType {
     }
     return super.promotesTo(t);
   }
+  @Override
+  public int getNumberOfBytes() {
+    return 2;
+  }
 }

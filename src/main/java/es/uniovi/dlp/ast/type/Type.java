@@ -27,6 +27,7 @@ public interface Type extends ASTNode {
 
   Type asignable(Type t);
 
+  int getNumberOfBytes();
 
 
   Type promotesTo(Type t);

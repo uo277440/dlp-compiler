@@ -1,5 +1,6 @@
 package es.uniovi.dlp.ast.type;
 
+import com.sun.jdi.request.InvalidRequestStateException;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class ErrorType extends AbstractType {
@@ -22,5 +23,9 @@ public class ErrorType extends AbstractType {
 
   public static ErrorType getInstance() {
     return instance;
+  }
+  @Override
+  public int getNumberOfBytes() {
+    throw new InvalidRequestStateException("El error no tiene tamaño asignado");
   }
 }

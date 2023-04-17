@@ -5,6 +5,8 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class StructField implements ASTNode {
 
+  private int offset = -1;
+
   private String name;
 
   private Type type;
@@ -38,7 +40,13 @@ public class StructField implements ASTNode {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+  public int getOffset() {
+    return offset;
+  }
 
+  public void setOffset(int offset) {
+    this.offset = offset;
+  }
   public Type getType() {
     return type;
   }

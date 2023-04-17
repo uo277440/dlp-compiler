@@ -96,4 +96,8 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
   public boolean dot() {
     return false;
   }
+  @Override
+  public int getNumberOfBytes() {
+    return -1;
+  }
 }

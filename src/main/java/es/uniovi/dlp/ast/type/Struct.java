@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Struct extends AbstractType {
+  public List<StructField> getFields() {
+    return fields;
+  }
+
   private List<StructField> fields;
 
   public Struct(int line, int column, List<StructField> fields) {
@@ -48,5 +52,13 @@ public class Struct extends AbstractType {
   @Override
   public boolean dot() {
     return true;
+  }
+  @Override
+  public int getNumberOfBytes() {
+    int number = 0;
+    for (StructField s :fields){
+      number+=s.getType().getNumberOfBytes();
+    }
+    return number;
   }
 }

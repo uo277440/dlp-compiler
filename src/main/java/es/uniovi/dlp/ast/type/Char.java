@@ -65,4 +65,8 @@ public class Char extends AbstractType {
     }
     return super.promotesTo(t);
   }
+  @Override
+  public int getNumberOfBytes() {
+    return 1;
+  }
 }
