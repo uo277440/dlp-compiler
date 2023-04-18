@@ -29,6 +29,27 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
 
         return -1;
     }
+    @Override
+    public Integer visit(FunctionDefinition f, Integer param) {
+        f.getType().accept(this, param);
+        int localSize = 0;
+        for(VarDefinition v:f.getBodyDefs()){
+                localSize += v.accept(this, localSize);
+        }
+        f.setLocalsSize(-localSize);
+
+        return null;
+    }
+    @Override
+    public Integer visit(FunctionType f, Integer param) {
+
+        int offset=4;
+        for(VarDefinition v:f.getParams()){
+            v.setOffset(offset);
+            offset+=v.getType().getNumberOfBytes();
+        }
+        return null;
+    }
 
     @Override
     public Integer visit(Struct r, Integer param) {

@@ -4,9 +4,14 @@ import es.uniovi.dlp.ast.program.Program;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.parser.XanaLexer;
 import es.uniovi.dlp.parser.XanaParser;
+import es.uniovi.dlp.visitor.codegeneration.CodeGenerator;
+import es.uniovi.dlp.visitor.codegeneration.ExecuteCGVisitor;
+import es.uniovi.dlp.visitor.codegeneration.OffsetVisitor;
 import es.uniovi.dlp.visitor.semantic.IdentificationVisitor;
 import es.uniovi.dlp.visitor.semantic.TypeCheckingVisitor;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -16,9 +21,19 @@ public class Compiler {
   private Program program;
   private boolean reportErrors = true;
 
+  private OutputStreamWriter out;
+  private boolean showDebug;
+
+
+
   public Compiler(String filename) {
     this.filename = filename;
   }
+  public Compiler(String filename,OutputStreamWriter out) {
+    this.filename = filename;
+    this.out=out;
+  }
+
 
   public void run() throws IOException {
     ErrorManager.getInstance().clearErrors();
@@ -26,7 +41,16 @@ public class Compiler {
 
     assignScope();
     assignType();
+
     checkErrors();
+    assignOffsets();
+
+    
+  }
+
+  private void assignOffsets() {
+    OffsetVisitor ov = new OffsetVisitor();
+    ov.visit(program, null);
   }
 
   private void checkErrors() {
@@ -58,6 +82,10 @@ public class Compiler {
     typeCheckingVisitor.visit(program, null);
   }
 
+  private void execute(){
+    ExecuteCGVisitor ev = new ExecuteCGVisitor(new CodeGenerator(showDebug,out,filename));
+  }
+
   private void assignScope() {
     // Run here your IdentificationVisitor
     IdentificationVisitor iv = new IdentificationVisitor();
@@ -66,5 +94,9 @@ public class Compiler {
 
   public void setReportErrors(boolean reportErrors) {
     this.reportErrors = reportErrors;
+  }
+
+  public void setShowDebug(boolean showDebug) {
+    this.showDebug = showDebug;
   }
 }

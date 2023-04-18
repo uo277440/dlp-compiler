@@ -42,6 +42,16 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
   private List<VarDefinition> bodyDefs;
 
   private List<Statement> statements;
+
+  public int getLocalsSize() {
+    return localsSize;
+  }
+
+  public void setLocalsSize(int localsSize) {
+    this.localsSize = localsSize;
+  }
+
+  private int localsSize=0;
   private String name;
 
   public FunctionDefinition(

@@ -54,7 +54,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
                   variable.getLine(), variable.getColumn(), ErrorReason.FUNCTION_NOT_DECLARED));
       in.setDefinition(null);
       in.setType(ErrorType.getInstance());
-      return super.visit(in, param);
+      return null;
     }
     in.setDefinition(definition);
     if (in.getDefinition() instanceof VarDefinition v) in.setType(v.getType());
@@ -75,7 +75,6 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
       id.setType(ErrorType.getInstance());
     }
     id.setDefinition(st.find(variable));
-    id.setType(id.getDefinition().getType());
     return null;
   }
 }

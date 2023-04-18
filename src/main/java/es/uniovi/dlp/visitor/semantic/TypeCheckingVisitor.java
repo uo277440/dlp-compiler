@@ -15,7 +15,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
   @Override
   public VoidType visit(Assignment a, Type parameters) {
     super.visit(a, parameters);
-    if (a.getLeft().getType() instanceof ErrorType || a.getRight().getType() instanceof ErrorType) {
+    if (isErrorType(a.getLeft().getType()) || isErrorType(a.getRight().getType())) {
       return null;
     }
     if (!a.getLeft().isLvalue()) {
@@ -47,17 +47,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
   @Override
   public VoidType visit(If i, Type parameters) {
     super.visit(i, parameters);
-    /*
-    if(i.getCondition() instanceof Invocation){
-        if(((FunctionType)i.getCondition().getType()).getReturnType().logical()==null){
-            ErrorManager.getInstance().addError(new Error(i.getCondition().getLine() ,i.getCondition().getColumn(),
-                    ErrorReason.NOT_LOGICAL));
-
-        }
-        return null;
-    }
-
-     */
     if (i.getCondition().getType().logical() == null) {
       ErrorManager.getInstance()
           .addError(
@@ -72,17 +61,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
   @Override
   public VoidType visit(While w, Type parameters) {
     super.visit(w, parameters);
-    if (w.getCondition() instanceof Invocation) {
-      if (((FunctionType) w.getCondition().getType()).getReturnType().logical() == null) {
-        ErrorManager.getInstance()
-            .addError(
-                new Error(
-                    w.getCondition().getLine(),
-                    w.getCondition().getColumn(),
-                    ErrorReason.NOT_LOGICAL));
-      }
-      return null;
-    }
+
     if (w.getCondition().getType().logical() == null) {
       ErrorManager.getInstance()
           .addError(
@@ -102,7 +81,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
           .addError(new Error(i.getLine(), i.getColumn(), ErrorReason.INVALID_INVOCATION));
       return null;
     }
-    if (i.getType() instanceof ErrorType) return null;
+
+    if(isErrorType(i.getName().getType())){
+      i.setType(ErrorType.getInstance());
+      return null;
+    }
 
     if (i.getArguments().size() != ((FunctionType) i.getName().getType()).getParams().size()) {
       ErrorManager.getInstance()
@@ -198,7 +181,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
   @Override
   public VoidType visit(Id id, Type parameters) {
     id.setLvalue(true);
+    var definition = id.getDefinition();
+    if (definition == null) {
+      id.setType(ErrorType.getInstance());
+    } else {
+      id.setType(definition.getType());
+    }
 
+    super.visit(id,parameters);
     return null;
   }
 
