@@ -5,10 +5,15 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     private final CodeGenerator cg;
-    private final AddressCGVisitor addressCGVisitor;
-    public ValueCGVisitor(CodeGenerator cg, AddressCGVisitor addressCGVisitor){
+
+    public void setAddressCGVisitor(AddressCGVisitor addressCGVisitor) {
+        this.addressCGVisitor = addressCGVisitor;
+    }
+
+    private  AddressCGVisitor addressCGVisitor;
+    public ValueCGVisitor(CodeGenerator cg){
 
         this.cg = cg;
-        this.addressCGVisitor=addressCGVisitor;
+
     }
 }

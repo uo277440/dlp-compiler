@@ -4,6 +4,7 @@ import es.uniovi.dlp.ast.program.Program;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.parser.XanaLexer;
 import es.uniovi.dlp.parser.XanaParser;
+import es.uniovi.dlp.visitor.codegeneration.AddressCGVisitor;
 import es.uniovi.dlp.visitor.codegeneration.CodeGenerator;
 import es.uniovi.dlp.visitor.codegeneration.ExecuteCGVisitor;
 import es.uniovi.dlp.visitor.codegeneration.OffsetVisitor;
