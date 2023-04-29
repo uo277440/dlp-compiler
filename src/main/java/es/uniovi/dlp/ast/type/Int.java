@@ -100,4 +100,10 @@ public class Int extends AbstractType {
   public int getNumberOfBytes() {
     return 2;
   }
+  @Override
+  public Type getIntermediateType(Type t) {
+    if(t instanceof DoubleType || t instanceof Char)
+      return t;
+    return super.getIntermediateType(t);
+  }
 }

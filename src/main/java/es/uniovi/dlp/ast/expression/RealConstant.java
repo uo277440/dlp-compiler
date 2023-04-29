@@ -18,4 +18,8 @@ public class RealConstant extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this, param);
   }
+
+    public double getValue() {
+    return value;
+    }
 }

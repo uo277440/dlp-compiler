@@ -18,4 +18,8 @@ public class IntLiteral extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this, param);
   }
+
+    public int getValue() {
+    return value;
+    }
 }

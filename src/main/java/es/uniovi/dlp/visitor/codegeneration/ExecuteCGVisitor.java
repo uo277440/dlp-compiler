@@ -24,7 +24,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(Assignment a, Type parameters) {
-        /*
+        /*          PLANTILLA
         ejecuta[Assigment->expr1 expr2]
                 address[expr1]
                 value[expr2]

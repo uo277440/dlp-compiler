@@ -65,6 +65,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
 
   @Override
   public Type visit(Id id, Type param) {
+
     var variable = id.getName();
 
     if (st.find(variable) == null) {

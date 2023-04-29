@@ -20,6 +20,11 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     return null;
   }
+  @Override
+  public Type getIntermediateType(Type t) {
+    return null;
+  }
+
 
   @Override
   public boolean isArithmetic() {

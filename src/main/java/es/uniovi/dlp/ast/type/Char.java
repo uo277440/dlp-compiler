@@ -1,5 +1,6 @@
 package es.uniovi.dlp.ast.type;
 
+import es.uniovi.dlp.ast.expression.IntLiteral;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Char extends AbstractType {
@@ -68,5 +69,13 @@ public class Char extends AbstractType {
   @Override
   public int getNumberOfBytes() {
     return 1;
+  }
+  @Override
+  public Type getIntermediateType(Type t) {
+    if(t instanceof DoubleType)
+      return Int.getInstance();
+    if(t instanceof Int)
+      return t;
+    return super.getIntermediateType(t);
   }
 }

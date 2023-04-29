@@ -72,4 +72,12 @@ public class DoubleType extends AbstractType {
   public int getNumberOfBytes() {
     return 4;
   }
+  @Override
+  public Type getIntermediateType(Type t) {
+    if(t instanceof Char)
+      return Int.getInstance();
+    if(t instanceof Int)
+      return t;
+    return super.getIntermediateType(t);
+  }
 }

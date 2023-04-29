@@ -31,4 +31,5 @@ public interface Type extends ASTNode {
 
 
   Type promotesTo(Type t);
+  Type getIntermediateType(Type t);
 }
