@@ -61,4 +61,11 @@ public class Struct extends AbstractType {
     }
     return number;
   }
+
+    public StructField getField(String atributte) {
+    for(StructField s: fields)
+      if(atributte.equals(s.getName()))
+        return s;
+    return null;
+    }
 }

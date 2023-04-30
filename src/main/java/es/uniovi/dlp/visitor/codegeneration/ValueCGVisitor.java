@@ -126,7 +126,30 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(ArithmeticOperation a, Type param) {
-       return null;
+        a.getLeftExpression().accept(this,param);
+        a.getRightExpression().accept(this,param);
+        cg.cast(a.getLeftExpression().getType(),a.getType());
+        cg.cast(a.getRightExpression().getType(),a.getType());
+        switch (a.getOp()){
+            case "+":
+                cg.add(a.getType());
+                break;
+            case "-":
+                cg.sub(a.getType());
+                break;
+            case "*":
+                cg.mul(a.getType());
+                break;
+            case "/":
+                cg.div(a.getType());
+                break;
+            case "%":
+                cg.mod(a.getType());
+                break;
+            default:
+                throw new IllegalStateException("operador no válido");
+        }
+        return null;
     }
 
 }

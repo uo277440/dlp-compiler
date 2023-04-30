@@ -169,4 +169,18 @@ public class CodeGenerator {
         castIntermediate(intermediate,to);
 
     }
+
+    public void mul(Type t) {
+        write("\tmul"+getSuffix(t));
+    }
+    public void add(Type t) {
+        write("\tadd"+getSuffix(t));
+    }
+
+    public void div(Type t) {
+        write("\tdiv"+getSuffix(t));
+    }
+    public void mod(Type t) {
+        write("\tmod"+getSuffix(t));
+    }
 }
