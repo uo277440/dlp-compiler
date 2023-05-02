@@ -12,7 +12,7 @@ public class FunctionType extends AbstractType {
   public Type getReturnType() {
     return returnType;
   }
-
+  int paramsSize;
   private List<VarDefinition> params;
 
   public void setReturnType(Type returnType) {
@@ -36,5 +36,13 @@ public class FunctionType extends AbstractType {
   @Override
   public int getNumberOfBytes() {
     return returnType.getNumberOfBytes();
+  }
+
+  public int getParamsSize() {
+    return paramsSize;
+  }
+
+  public void setParamsSize(int paramsSize) {
+    this.paramsSize = paramsSize;
   }
 }

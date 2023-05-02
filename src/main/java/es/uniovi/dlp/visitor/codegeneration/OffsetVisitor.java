@@ -4,6 +4,7 @@ import es.uniovi.dlp.ast.expression.IntLiteral;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.VarDefinition;
 import es.uniovi.dlp.ast.statement.Statement;
+import es.uniovi.dlp.ast.statement.While;
 import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Struct;
 import es.uniovi.dlp.ast.type.StructField;
@@ -29,6 +30,7 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
 
         return -1;
     }
+
     @Override
     public Integer visit(FunctionDefinition f, Integer param) {
         f.getType().accept(this, param);
@@ -43,11 +45,13 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
     @Override
     public Integer visit(FunctionType f, Integer param) {
 
-        int offset=4;
-        for(VarDefinition v:f.getParams()){
-            v.setOffset(offset);
-            offset+=v.getType().getNumberOfBytes();
+        int acumulated = 4;
+
+        for(VarDefinition vd : f.getParams()){
+            vd.setOffset(acumulated);
+            acumulated+=vd.getType().getNumberOfBytes();
         }
+        f.setParamsSize(acumulated-4);
         return null;
     }
 
@@ -65,4 +69,5 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
         r.setOffset(param);
         return r.getType().getNumberOfBytes();
     }
+
 }

@@ -183,4 +183,34 @@ public class CodeGenerator {
     public void mod(Type t) {
         write("\tmod"+getSuffix(t));
     }
+
+    public void in(Type t) {
+        write("\tin"+getSuffix(t));
+    }
+
+    public void label(int label) {
+            write("Label_"+label+ ":");
+        }
+
+    public void jmp(int cond) {
+           write("\tjmp\tLabel_"+cond);
+        }
+    public void jz(int cond) {
+        write("\tjz\tLabel_"+cond);
+    }
+    public void out(Type t) {
+        write("\tOUT"+getSuffix(t));
+    }
+
+    public void ret(int numberOfBytes, int i, int paramsSize) {
+        write("\tret\t"+numberOfBytes+", " + i + ", " + paramsSize);
+    }
+
+    public void enter(int i) {
+            write("\tenter\t"+i);
+    }
+
+    public void nameFunc(String name) {
+        write(name+":");
+    }
 }

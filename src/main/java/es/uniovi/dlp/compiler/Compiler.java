@@ -46,6 +46,8 @@ public class Compiler {
     checkErrors();
     assignOffsets();
 
+    execute();
+
     
   }
 
@@ -85,6 +87,7 @@ public class Compiler {
 
   private void execute(){
     ExecuteCGVisitor ev = new ExecuteCGVisitor(new CodeGenerator(showDebug,out,filename));
+    ev.visit(program,null);
   }
 
   private void assignScope() {

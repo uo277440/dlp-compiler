@@ -21,20 +21,21 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
     }
     @Override
-    public VoidType visit(Not n, Type parameters) {
-        super.visit(n,parameters);
+    public VoidType visit(Not n, Type param) {
+
+        n.getExpression().accept(this,param);
         cg.not();
         return null;
     }
     @Override
-    public VoidType visit(UnaryMinus n, Type parameters) {
-        super.visit(n,parameters);
+    public VoidType visit(UnaryMinus n, Type param) {
+        n.getExpression().accept(this,param);
         cg.sub(n.getType());
         return null;
     }
     @Override
     public VoidType visit(Id i, Type param) {
-        i.accept(addressCGVisitor, param);
+        i.accept(addressCGVisitor, null);
         cg.load(i.getType());
         return null;
     }
@@ -56,9 +57,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     }
     @Override
     public VoidType visit(Invocation i, Type param) {
-        for(Expression exp:i.getArguments()){
-            exp.accept(this, param);
-        }
+        i.getArguments().forEach(a->a.accept(this,param));
         cg.call(i.getName().getName());
         return null;
     }
@@ -114,7 +113,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public VoidType visit(FieldAccess f, Type param) {
-        f.accept(addressCGVisitor, param);
+        f.accept(addressCGVisitor, null);
         cg.load(f.getType());
         return null;
     }
