@@ -141,10 +141,11 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
                         halt
                         ejecuta[definition.]
      */
-
+/**
     for (Definition d : p.getDefinitions()) {
       if (d instanceof VarDefinition) d.accept(this, param);
     }
+ **/
     cg.call("main");
     cg.halt();
     for (Definition d : p.getDefinitions()) {

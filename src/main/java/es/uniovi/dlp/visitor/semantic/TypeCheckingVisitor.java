@@ -103,7 +103,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return null;
       }
     }
-
+    i.setType(((FunctionType) (i.getDefinition().getType())).getReturnType());
     return null;
   }
 

@@ -57,8 +57,10 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
       return null;
     }
     in.setDefinition(definition);
+    /**
     if (in.getDefinition() instanceof VarDefinition v) in.setType(v.getType());
     else in.setType(((FunctionType) (in.getDefinition().getType())).getReturnType());
+     **/
 
     return super.visit(in, param);
   }
