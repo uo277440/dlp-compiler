@@ -29,7 +29,7 @@ public interface Type extends ASTNode {
 
   int getNumberOfBytes();
 
-
   Type promotesTo(Type t);
+
   Type getIntermediateType(Type t);
 }

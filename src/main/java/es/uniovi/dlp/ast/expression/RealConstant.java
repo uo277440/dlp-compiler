@@ -19,7 +19,7 @@ public class RealConstant extends AbstractExpression {
     return visitor.visit(this, param);
   }
 
-    public double getValue() {
+  public double getValue() {
     return value;
-    }
+  }
 }

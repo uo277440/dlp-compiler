@@ -41,6 +41,7 @@ public class VarDefinition extends AbstractASTNode implements Definition {
   public void setScope(int scope) {
     this.scope = scope;
   }
+
   public int getOffset() {
     return offset;
   }

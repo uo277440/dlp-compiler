@@ -53,19 +53,18 @@ public class Struct extends AbstractType {
   public boolean dot() {
     return true;
   }
+
   @Override
   public int getNumberOfBytes() {
     int number = 0;
-    for (StructField s :fields){
-      number+=s.getType().getNumberOfBytes();
+    for (StructField s : fields) {
+      number += s.getType().getNumberOfBytes();
     }
     return number;
   }
 
-    public StructField getField(String atributte) {
-    for(StructField s: fields)
-      if(atributte.equals(s.getName()))
-        return s;
+  public StructField getField(String atributte) {
+    for (StructField s : fields) if (atributte.equals(s.getName())) return s;
     return null;
-    }
+  }
 }

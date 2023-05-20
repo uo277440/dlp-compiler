@@ -5,7 +5,7 @@ import es.uniovi.dlp.ast.type.Type;
 
 public abstract class AbstractExpression extends AbstractASTNode implements Expression {
 
-  private boolean lvalue=false;
+  private boolean lvalue = false;
   private Type type;
 
   public AbstractExpression(int line, int column) {

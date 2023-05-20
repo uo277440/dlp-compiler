@@ -2,7 +2,6 @@ package es.uniovi.dlp.ast.expression;
 
 import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.visitor.AbstractVisitor;
-import es.uniovi.dlp.visitor.codegeneration.AddressCGVisitor;
 
 public class Id extends AbstractExpression {
   public String getName() {
@@ -32,6 +31,4 @@ public class Id extends AbstractExpression {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this, param);
   }
-
-
 }

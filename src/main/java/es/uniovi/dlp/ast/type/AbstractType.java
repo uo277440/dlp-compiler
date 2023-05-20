@@ -20,11 +20,11 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     return null;
   }
+
   @Override
   public Type getIntermediateType(Type t) {
     return null;
   }
-
 
   @Override
   public boolean isArithmetic() {
@@ -76,6 +76,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
     return null;
   }
+
   @Override
   public Type promotesTo(Type t) {
     if (t instanceof ErrorType) {
@@ -101,6 +102,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
   public boolean dot() {
     return false;
   }
+
   @Override
   public int getNumberOfBytes() {
     return -1;

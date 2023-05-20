@@ -61,6 +61,7 @@ public class DoubleType extends AbstractType {
     }
     return super.asignable(t);
   }
+
   @Override
   public Type promotesTo(Type t) {
     if (t instanceof DoubleType) {
@@ -68,16 +69,16 @@ public class DoubleType extends AbstractType {
     }
     return super.promotesTo(t);
   }
+
   @Override
   public int getNumberOfBytes() {
     return 4;
   }
+
   @Override
   public Type getIntermediateType(Type t) {
-    if(t instanceof Char)
-      return Int.getInstance();
-    if(t instanceof Int)
-      return t;
+    if (t instanceof Char) return Int.getInstance();
+    if (t instanceof Int) return t;
     return super.getIntermediateType(t);
   }
 }

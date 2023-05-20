@@ -82,7 +82,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
       return null;
     }
 
-    if(isErrorType(i.getName().getType())){
+    if (isErrorType(i.getName().getType())) {
       i.setType(ErrorType.getInstance());
       return null;
     }
@@ -188,7 +188,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
       id.setType(definition.getType());
     }
 
-    super.visit(id,parameters);
+    super.visit(id, parameters);
     return null;
   }
 

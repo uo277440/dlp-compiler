@@ -69,7 +69,6 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
     var variable = id.getName();
 
     if (st.find(variable) == null) {
-
       ErrorManager.getInstance()
           .addError(new Error(id.getLine(), id.getColumn(), ErrorReason.VARIABLE_NOT_DECLARED));
       id.setDefinition(null);

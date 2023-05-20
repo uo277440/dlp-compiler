@@ -24,6 +24,7 @@ public class ErrorType extends AbstractType {
   public static ErrorType getInstance() {
     return instance;
   }
+
   @Override
   public int getNumberOfBytes() {
     throw new InvalidRequestStateException("El error no tiene tamaño asignado");

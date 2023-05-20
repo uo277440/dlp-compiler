@@ -4,14 +4,13 @@ import es.uniovi.dlp.ast.program.Program;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.parser.XanaLexer;
 import es.uniovi.dlp.parser.XanaParser;
-import es.uniovi.dlp.visitor.codegeneration.AddressCGVisitor;
 import es.uniovi.dlp.visitor.codegeneration.CodeGenerator;
 import es.uniovi.dlp.visitor.codegeneration.ExecuteCGVisitor;
 import es.uniovi.dlp.visitor.codegeneration.OffsetVisitor;
 import es.uniovi.dlp.visitor.semantic.IdentificationVisitor;
 import es.uniovi.dlp.visitor.semantic.TypeCheckingVisitor;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -25,16 +24,15 @@ public class Compiler {
   private OutputStreamWriter out;
   private boolean showDebug;
 
-
-
-  public Compiler(String filename) {
+  public Compiler(String filename) throws FileNotFoundException, UnsupportedEncodingException {
     this.filename = filename;
-  }
-  public Compiler(String filename,OutputStreamWriter out) {
-    this.filename = filename;
-    this.out=out;
+    this.out=new OutputStreamWriter(new FileOutputStream("examples/codegeneration/pruebas.mp"),"utf-8");
   }
 
+  public Compiler(String filename, OutputStreamWriter out) {
+    this.filename = filename;
+    this.out = out;
+  }
 
   public void run() throws IOException {
     ErrorManager.getInstance().clearErrors();
@@ -47,8 +45,6 @@ public class Compiler {
     assignOffsets();
 
     execute();
-
-    
   }
 
   private void assignOffsets() {
@@ -85,9 +81,9 @@ public class Compiler {
     typeCheckingVisitor.visit(program, null);
   }
 
-  private void execute(){
-    ExecuteCGVisitor ev = new ExecuteCGVisitor(new CodeGenerator(showDebug,out,filename));
-    ev.visit(program,null);
+  private void execute() {
+    ExecuteCGVisitor ev = new ExecuteCGVisitor(new CodeGenerator(showDebug, out, filename));
+    ev.visit(program, null);
   }
 
   private void assignScope() {

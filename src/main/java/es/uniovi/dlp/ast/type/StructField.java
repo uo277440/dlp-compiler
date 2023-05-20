@@ -40,6 +40,7 @@ public class StructField implements ASTNode {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return null;
   }
+
   public int getOffset() {
     return offset;
   }
@@ -47,6 +48,7 @@ public class StructField implements ASTNode {
   public void setOffset(int offset) {
     this.offset = offset;
   }
+
   public Type getType() {
     return type;
   }

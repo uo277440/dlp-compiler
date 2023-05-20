@@ -89,6 +89,7 @@ public class Int extends AbstractType {
   public Type logical() {
     return this;
   }
+
   @Override
   public Type promotesTo(Type t) {
     if (t instanceof Int || t instanceof DoubleType) {
@@ -96,14 +97,15 @@ public class Int extends AbstractType {
     }
     return super.promotesTo(t);
   }
+
   @Override
   public int getNumberOfBytes() {
     return 2;
   }
+
   @Override
   public Type getIntermediateType(Type t) {
-    if(t instanceof DoubleType || t instanceof Char)
-      return t;
+    if (t instanceof DoubleType || t instanceof Char) return t;
     return super.getIntermediateType(t);
   }
 }

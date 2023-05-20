@@ -12,6 +12,7 @@ public class FunctionType extends AbstractType {
   public Type getReturnType() {
     return returnType;
   }
+
   int paramsSize;
   private List<VarDefinition> params;
 
@@ -33,6 +34,7 @@ public class FunctionType extends AbstractType {
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
     return visitor.visit(this, param);
   }
+
   @Override
   public int getNumberOfBytes() {
     return returnType.getNumberOfBytes();

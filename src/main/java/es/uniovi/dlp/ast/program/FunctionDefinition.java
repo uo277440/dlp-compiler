@@ -51,7 +51,7 @@ public class FunctionDefinition extends AbstractASTNode implements Definition {
     this.localsSize = localsSize;
   }
 
-  private int localsSize=0;
+  private int localsSize = 0;
   private String name;
 
   public FunctionDefinition(
