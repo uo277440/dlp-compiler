@@ -66,7 +66,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   @Override
   public ReturnType visit(ComparisonOperation co, ParamType param) {
     co.getLeftExpression().accept(this, param);
-    co.getLeftExpression().accept(this, param);
+    co.getRightExpression().accept(this, param);
     return null;
   }
 
@@ -88,6 +88,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
     indexing.getName().accept(this, param);
     return null;
   }
+
 
   @Override
   public ReturnType visit(Invocation invocation, ParamType param) {

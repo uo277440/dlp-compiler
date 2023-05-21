@@ -1,5 +1,6 @@
 package es.uniovi.dlp.visitor.codegeneration;
 
+import es.uniovi.dlp.ast.expression.Id;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.VarDefinition;
 import es.uniovi.dlp.ast.type.FunctionType;
@@ -11,13 +12,19 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
   private int size = 0;
 
   @Override
+  public Integer visit(Id id, Integer param) {
+    id.getDefinition().getType().accept(this,param);
+
+    return null;
+  }
+  @Override
   public Integer visit(VarDefinition v, Integer param) {
     super.visit(v, param);
 
     if (v.getScope() == 0) {
       v.setOffset(size);
       size += v.getType().getNumberOfBytes();
-      return -1;
+      return 0;
     } else if (v.getScope() == 1) {
       v.setOffset(-(param + v.getType().getNumberOfBytes()));
       return v.getType().getNumberOfBytes();
@@ -28,6 +35,7 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
 
   @Override
   public Integer visit(FunctionDefinition f, Integer param) {
+    f.getStatements().forEach(st->st.accept(this,param));
     f.getType().accept(this, param);
     int localSize = 0;
     for (VarDefinition v : f.getBodyDefs()) {

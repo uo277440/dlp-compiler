@@ -38,7 +38,8 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
      */
     a.getLeft().accept(addressV, null);
     a.getRight().accept(valueV, null);
-    cg.store(a.getRight().getType());
+    cg.cast(a.getRight().getType(),a.getLeft().getType());
+    cg.store(a.getLeft().getType());
 
     return null;
   }
