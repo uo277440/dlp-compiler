@@ -3,6 +3,7 @@ package es.uniovi.dlp.visitor.codegeneration;
 import es.uniovi.dlp.ast.expression.Id;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.VarDefinition;
+import es.uniovi.dlp.ast.type.Array;
 import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Struct;
 import es.uniovi.dlp.ast.type.StructField;
@@ -19,7 +20,7 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
   }
   @Override
   public Integer visit(VarDefinition v, Integer param) {
-    super.visit(v, param);
+      v.getType().accept(this,param);
 
     if (v.getScope() == 0) {
       v.setOffset(size);

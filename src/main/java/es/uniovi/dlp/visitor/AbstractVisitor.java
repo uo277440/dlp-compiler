@@ -175,8 +175,8 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
   }
 
   @Override
-  public ReturnType visit(Array d, ParamType param) {
-
+  public ReturnType visit(Array a, ParamType param) {
+    a.getTypeArray().accept(this,param);
     return null;
   }
 

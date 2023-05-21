@@ -4,6 +4,15 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Array extends AbstractType {
   private int size;
+
+  public Type getTypeArray() {
+    return typeArray;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
   private Type typeArray;
 
   public Array(int line, int column, Type type, int size) {
@@ -15,12 +24,12 @@ public class Array extends AbstractType {
   @Override
   public <ReturnType, ParamType> ReturnType accept(
       AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
-    return null;
+    return visitor.visit(this,param);
   }
 
   @Override
   public Type squareBrackets(Type t) {
-    if (t instanceof Int) {
+    if (t instanceof Int i) {
       return typeArray;
     }
     return super.squareBrackets(t);
