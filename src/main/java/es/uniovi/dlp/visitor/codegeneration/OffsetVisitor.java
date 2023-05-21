@@ -50,11 +50,11 @@ public class OffsetVisitor extends AbstractVisitor<Integer, Integer> {
   public Integer visit(FunctionType f, Integer param) {
 
     int acumulated = 4;
-
-    for (VarDefinition vd : f.getParams()) {
-      vd.setOffset(acumulated);
-      acumulated += vd.getType().getNumberOfBytes();
+    for(int i=f.getParams().size()-1;i>=0;i--){
+      f.getParams().get(i).setOffset(acumulated);
+      acumulated+=f.getParams().get(i).getType().getNumberOfBytes();
     }
+
     f.setParamsSize(acumulated - 4);
     return null;
   }
