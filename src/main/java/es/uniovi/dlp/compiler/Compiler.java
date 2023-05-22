@@ -43,7 +43,7 @@ public class Compiler {
 
     checkErrors();
     assignOffsets();
-    //  if(!ErrorManager.getInstance().hasErrors()) //no hará la generación de código si hay errores en las anteriores fases
+    if(!ErrorManager.getInstance().hasErrors()) //no hará la generación de código si hay errores en las anteriores fases
     execute();
   }
 
