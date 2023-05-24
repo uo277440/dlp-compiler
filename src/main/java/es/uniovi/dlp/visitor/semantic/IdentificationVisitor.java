@@ -75,6 +75,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
           .addError(new Error(id.getLine(), id.getColumn(), ErrorReason.VARIABLE_NOT_DECLARED));
       id.setDefinition(null);
       id.setType(ErrorType.getInstance());
+      return null;
     }
     id.setDefinition(st.find(variable));
     return null;

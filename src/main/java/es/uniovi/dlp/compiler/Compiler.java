@@ -42,6 +42,7 @@ public class Compiler {
     assignType();
 
     checkErrors();
+    if(!ErrorManager.getInstance().hasErrors())
     assignOffsets();
     if(!ErrorManager.getInstance().hasErrors()) //no hará la generación de código si hay errores en las anteriores fases
     execute();
