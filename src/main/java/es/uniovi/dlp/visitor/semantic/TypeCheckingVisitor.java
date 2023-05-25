@@ -281,6 +281,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
                   um.getExpression().getLine(),
                   um.getExpression().getColumn(),
                   ErrorReason.INVALID_ARITHMETIC));
+      return null;
     }
     um.setType(um.getExpression().getType());
     return null;
