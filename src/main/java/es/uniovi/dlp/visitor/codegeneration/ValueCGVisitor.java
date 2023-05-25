@@ -155,11 +155,11 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     }
     return null;
   }
+
   @Override
-  public VoidType visit(Indexing i,Type param){
-    i.accept(addressCGVisitor,null);
+  public VoidType visit(Indexing i, Type param) {
+    i.accept(addressCGVisitor, null);
     cg.load(i.getType());
     return null;
   }
 }
-

@@ -89,7 +89,6 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
     return null;
   }
 
-
   @Override
   public ReturnType visit(Invocation invocation, ParamType param) {
     invocation.getArguments().forEach(argument -> argument.accept(this, param));
@@ -176,7 +175,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType>
 
   @Override
   public ReturnType visit(Array a, ParamType param) {
-    a.getTypeArray().accept(this,param);
+    a.getTypeArray().accept(this, param);
     return null;
   }
 

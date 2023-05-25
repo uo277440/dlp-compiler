@@ -9,9 +9,7 @@ import es.uniovi.dlp.visitor.codegeneration.ExecuteCGVisitor;
 import es.uniovi.dlp.visitor.codegeneration.OffsetVisitor;
 import es.uniovi.dlp.visitor.semantic.IdentificationVisitor;
 import es.uniovi.dlp.visitor.semantic.TypeCheckingVisitor;
-
 import java.io.*;
-
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -26,7 +24,8 @@ public class Compiler {
 
   public Compiler(String filename) throws FileNotFoundException, UnsupportedEncodingException {
     this.filename = filename;
-    this.out=new OutputStreamWriter(new FileOutputStream("examples/codegeneration/pruebas.mp"),"utf-8");
+    this.out =
+        new OutputStreamWriter(new FileOutputStream("examples/codegeneration/pruebas.mp"), "utf-8");
   }
 
   public Compiler(String filename, OutputStreamWriter out) {
@@ -42,9 +41,9 @@ public class Compiler {
     assignType();
 
     checkErrors();
-    if(!ErrorManager.getInstance().hasErrors())
-    assignOffsets();
-    if(!ErrorManager.getInstance().hasErrors()) //no hará la generación de código si hay errores en las anteriores fases
+    if (!ErrorManager.getInstance().hasErrors()) assignOffsets();
+    if (!ErrorManager.getInstance()
+        .hasErrors()) // no hará la generación de código si hay errores en las anteriores fases
     execute();
   }
 

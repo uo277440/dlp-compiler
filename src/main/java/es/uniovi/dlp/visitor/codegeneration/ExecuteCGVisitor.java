@@ -4,7 +4,6 @@ import es.uniovi.dlp.ast.expression.Invocation;
 import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.Program;
-import es.uniovi.dlp.ast.program.VarDefinition;
 import es.uniovi.dlp.ast.statement.*;
 import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Type;
@@ -38,7 +37,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
      */
     a.getLeft().accept(addressV, null);
     a.getRight().accept(valueV, null);
-    cg.cast(a.getRight().getType(),a.getLeft().getType());
+    cg.cast(a.getRight().getType(), a.getLeft().getType());
     cg.store(a.getLeft().getType());
 
     return null;
@@ -142,11 +141,10 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
                         halt
                         ejecuta[definition.]
      */
-/**
-    for (Definition d : p.getDefinitions()) {
-      if (d instanceof VarDefinition) d.accept(this, param);
-    }
- **/
+    /**
+     * for (Definition d : p.getDefinitions()) { if (d instanceof VarDefinition) d.accept(this,
+     * param); }
+     */
     cg.call("main");
     cg.halt();
     for (Definition d : p.getDefinitions()) {

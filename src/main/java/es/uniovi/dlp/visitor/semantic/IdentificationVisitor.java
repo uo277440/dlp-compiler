@@ -5,7 +5,6 @@ import es.uniovi.dlp.ast.expression.Invocation;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
 import es.uniovi.dlp.ast.program.VarDefinition;
 import es.uniovi.dlp.ast.type.ErrorType;
-import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.ast.type.VoidType;
 import es.uniovi.dlp.error.Error;
@@ -58,10 +57,9 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type> {
     }
     in.setDefinition(definition);
     /**
-    if (in.getDefinition() instanceof VarDefinition v) in.setType(v.getType());
-    else in.setType(((FunctionType) (in.getDefinition().getType())).getReturnType());
-     **/
-
+     * if (in.getDefinition() instanceof VarDefinition v) in.setType(v.getType()); else
+     * in.setType(((FunctionType) (in.getDefinition().getType())).getReturnType());
+     */
     return super.visit(in, param);
   }
 

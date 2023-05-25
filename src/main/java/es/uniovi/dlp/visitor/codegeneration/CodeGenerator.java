@@ -166,7 +166,7 @@ public class CodeGenerator {
   private void castIntermediate(Type from, Type to) {
     if (from.getClass().equals(to.getClass())) return;
     Type intermediate = from.getIntermediateType(to);
-    write("\t"+getSuffix(from) + "2" + getSuffix(intermediate));
+    write("\t" + getSuffix(from) + "2" + getSuffix(intermediate));
     castIntermediate(intermediate, to);
   }
 
