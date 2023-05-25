@@ -8,27 +8,95 @@ interface ASTNode {
 }
 class ArrayType{
     size: int
+    squareBrackets(Type t):Type
+    int getNumberOfBytes();
 }
-class StructType {
+class Struct {
     fields: List<StructField>
+    allowDot(String name):Type
+    dot():boolean
+    int getNumberOfBytes();
+
 }
 class StructField{
-name: String
-type: Type
+    name: String
+    type: Type
+
 }
 
-interface Type
+interface Type{
+   arithmetic(Type t):Type
+
+  allowDot(String name):Type
+
+  dot():boolean
+
+  isArithmetic():boolean
+
+  casteable(Type t):Type
+
+  logical(Type t):Type
+
+  logical():Type
+
+  comparisson(Type t):Type
+
+  squareBrackets(Type t):Type
+
+  isIndexable():boolean
+
+  isLogical():boolean
+
+  Type asignable(Type t);
+
+  int getNumberOfBytes();
+
+  Type promotesTo(Type t);
+
+  Type getIntermediateType(Type t);
+}
 
 ASTNode <|-- Type
 
 class IntType{
-value: int
+    value: int
+    arithmetic(Type t):Type
+    isArithmetic():boolean
+    casteable(Type t):Type
+    logical(Type t):Type
+    logical():Type
+    comparisson(Type t):Type
+    isIndexable():boolean
+    isLogical():boolean
+    Type asignable(Type t);
+    int getNumberOfBytes();
+    Type promotesTo(Type t);
+
+  Type getIntermediateType(Type t);
 }
 class CharType{
     value: char
+    arithmetic(Type t):Type
+    isArithmetic():boolean
+    comparisson(Type t):Type
+    casteable(Type t):Type
+    Type asignable(Type t);
+    int getNumberOfBytes();
+    Type promotesTo(Type t);
+
+  Type getIntermediateType(Type t);
         }
 class DoubleType{
-         value: double
+    value: double
+    arithmetic(Type t):Type
+    isArithmetic():boolean
+    casteable(Type t):Type
+    comparisson(Type t):Type
+    Type asignable(Type t);
+    int getNumberOfBytes();
+    Type promotesTo(Type t);
+
+      Type getIntermediateType(Type t);
       }
 class FuncType{
 params: VarDefinition;
@@ -39,7 +107,7 @@ Type <|.. IntType
 Type <|.. CharType
 Type <|.. DoubleType
 Type <|.. FuncType
-Type <|.. StructType
+Type <|.. Struct
 Type <|.. ArrayType
 
 @enduml
