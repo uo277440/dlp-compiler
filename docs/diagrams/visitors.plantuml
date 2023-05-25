@@ -1,4 +1,4 @@
-@startuml Expressions
+@startuml Visitors
 skinparam style strictuml
 skinparam monochrome true
 
@@ -10,7 +10,7 @@ interface Visitor {
 
       visit(FunctionDefinition fd, ParamType param):ReturnType
 
-      (ArithmeticOperation ao, ParamType param):ReturnType
+      visit(ArithmeticOperation ao, ParamType param):ReturnType
 
       visit(Cast cast, ParamType param):ReturnType
 
@@ -71,33 +71,160 @@ visit(Program program, ParamType param):ReturnType
      visit(VarDefinition vd, ParamType param):ReturnType
 
       visit(FunctionDefinition fd, ParamType param):ReturnType
-       visit(...)
+      visit(...)
 }
 
 class ExecuteCgVisitor {
     valueV: ValueVisitor
+    addressV: AddressVisitor
+    cg:CodeGenerator
+    visit(Program program, ParamType param):ReturnType
+
+          visit(VarDefinition vd, ParamType param):ReturnType
+
+          visit(FunctionDefinition fd, ParamType param):ReturnType
+
+          visit(Invocation invocation, ParamType param):ReturnType
+
+          visit(Read read, ParamType param):ReturnType
+
+          visit(Assignment assignment, ParamType param):ReturnType
+
+          visit(If i, ParamType param):ReturnType
+
+          visit(While w, ParamType param):ReturnType
+
+          visit(Write w, ParamType param):ReturnType
+
+          visit(Return r, ParamType param):ReturnType
+
+          visit(FunctionType ft, ParamType param):ReturnType
+
 }
 class ValueVisitor {
     addressV: AddressVisitor
+    visit(Program program, ParamType param):ReturnType
+
+         visit(VarDefinition vd, ParamType param):ReturnType
+
+          visit(FunctionDefinition fd, ParamType param):ReturnType
+
+          visit(ArithmeticOperation ao, ParamType param):ReturnType
+
+          visit(Cast cast, ParamType param):ReturnType
+
+           visit(CharConstant c, ParamType param):ReturnType
+
+          visit(ComparisonOperation co, ParamType param):ReturnType
+
+          visit(FieldAccess fa, ParamType param):ReturnType
+
+          visit(Id id, ParamType param):ReturnType
+
+          visit(Indexing indexing, ParamType param):ReturnType
+
+          visit(IntLiteral il, ParamType param):ReturnType
+
+          visit(Invocation invocation, ParamType param):ReturnType
+
+          visit(LogicOperation lo, ParamType param):ReturnType
+
+          visit(Not not, ParamType param):ReturnType
+
+          visit(RealConstant rc, ParamType param):ReturnType
+
+          visit(UnaryMinus um, ParamType param):ReturnType
 }
 
 class OffsetVisitor{
 size: int
+visit(Program program, ParamType param):ReturnType
+     visit(Id id, ParamType param):ReturnType
+
+      visit(VarDefinition vd, ParamType param):ReturnType
+
+      visit(FunctionDefinition fd, ParamType param):ReturnType
+
+      visit(Struct s, ParamType param):ReturnType
+
+      visit(StructField sf, ParamType param):ReturnType
+
+      visit(FunctionType ft, ParamType param):ReturnType
+
 }
 class AddressVisitor{
+visit(Program program, ParamType param):ReturnType
+       valueV:ValueVisitor
+
+      visit(FieldAccess fa, ParamType param):ReturnType
+
+      visit(Id id, ParamType param):ReturnType
+
+      visit(Indexing indexing, ParamType param):ReturnType
+
+
 
 }
 class TypeCheckingVisitor{
     op: String
     leftExpression: Expression
     rightExpression: Expression
+    visit(Program program, ParamType param):ReturnType
+
+          visit(ArithmeticOperation ao, ParamType param):ReturnType
+
+          visit(Cast cast, ParamType param):ReturnType
+
+          visit(ComparisonOperation co, ParamType param):ReturnType
+
+          visit(FieldAccess fa, ParamType param):ReturnType
+
+          visit(Id id, ParamType param):ReturnType
+
+          visit(Indexing indexing, ParamType param):ReturnType
+
+          visit(Invocation invocation, ParamType param):ReturnType
+
+          visit(LogicOperation lo, ParamType param):ReturnType
+
+          visit(Not not, ParamType param):ReturnType
+
+          visit(UnaryMinus um, ParamType param):ReturnType
+
+          visit(Read read, ParamType param):ReturnType
+
+          visit(Assignment assignment, ParamType param):ReturnType
+
+          visit(If i, ParamType param):ReturnType
+
+          visit(While w, ParamType param):ReturnType
+
+          visit(Return r, ParamType param):ReturnType
 }
 class IdentificationVisitor{
     st: SymbolTable
 
+   visit(Id id, ParamType param):ReturnType
+
+   visit(VarDefinition vd, ParamType param):ReturnType
+
+   visit(FunctionDefinition fd, ParamType param):ReturnType
+
+   visit(Invocation invocation, ParamType param):ReturnType
+
 }
 class CodeGenerator{
     out: OutputStreamWriter
+}
+class SymbolTable{
+    scope:int
+    table:List<Map<String, Definition>>
+    set():void
+    reset():void
+    insert():boolean
+    find():Definition
+    findInCurrentScope():Definition
+
 }
 
 Visitor <|-- AbstractVisitor
@@ -113,5 +240,6 @@ ExecuteCgVisitor o-- "1" AddressVisitor
 ExecuteCgVisitor o-- "1" CodeGenerator
 AddressVisitor o-- "1" CodeGenerator
 ValueVisitor o-- "1" CodeGenerator
+IdentificationVisitor o-- "1" SymbolTable
 
 @enduml
