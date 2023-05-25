@@ -56,8 +56,9 @@ public class Int extends AbstractType {
   @Override
   public Type comparisson(Type t) {
     if (t instanceof Int || t instanceof Char || t instanceof DoubleType) {
-      return t;
+      return Int.getInstance();
     }
+
     return super.comparisson(t);
   }
 

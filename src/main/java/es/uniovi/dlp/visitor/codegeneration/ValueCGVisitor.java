@@ -29,6 +29,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
   @Override
   public VoidType visit(UnaryMinus n, Type param) {
+    cg.push(n.getType(),0);
     n.getExpression().accept(this, param);
     cg.sub(n.getType());
     return null;
@@ -68,26 +69,27 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   @Override
   public VoidType visit(ComparisonOperation c, Type param) {
     c.getLeftExpression().accept(this, param);
+    cg.cast(c.getLeftExpression().getType(),c.getCastTo());
     c.getRightExpression().accept(this, param);
-
+    cg.cast(c.getRightExpression().getType(),c.getCastTo());
     switch (c.getOp()) {
       case ">":
-        cg.gt(c.getType());
+        cg.gt(c.getCastTo());
         break;
       case "<":
-        cg.lt(c.getType());
+        cg.lt(c.getCastTo());
         break;
       case "<=":
-        cg.le(c.getType());
+        cg.le(c.getCastTo());
         break;
       case "==":
-        cg.eq(c.getType());
+        cg.eq(c.getCastTo());
         break;
       case ">=":
-        cg.ge(c.getType());
+        cg.ge(c.getCastTo());
         break;
       case "!=":
-        cg.ne(c.getType());
+        cg.ne(c.getCastTo());
         break;
       default:
         throw new IllegalStateException("El operando es incorrecto");

@@ -147,8 +147,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     super.visit(c, parameters);
     var left = c.getLeftExpression().getType();
     var right = c.getRightExpression().getType();
-    // c.setType(left.comparisson(right));
-    if (left.comparisson(right) == null) {
+    c.setType(left.comparisson(right));
+    if(left instanceof DoubleType || right instanceof DoubleType){
+      c.setCastTo(DoubleType.getInstance());
+    }else{
+      c.setCastTo(Int.getInstance());
+    }
+
+    if (c.getType() == null) {
       c.setType(new ErrorType(0, 0));
       ErrorManager.getInstance()
           .addError(new Error(c.getLine(), c.getColumn(), ErrorReason.INVALID_COMPARISON));
@@ -276,7 +282,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
                   um.getExpression().getColumn(),
                   ErrorReason.INVALID_ARITHMETIC));
     }
-
+    um.setType(um.getExpression().getType());
     return null;
   }
 

@@ -1,10 +1,21 @@
 package es.uniovi.dlp.ast.expression;
 
 import es.uniovi.dlp.ast.type.Int;
+import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class ComparisonOperation extends AbstractExpression {
   private String op;
+
+  public Type getCastTo() {
+    return castTo;
+  }
+
+  public void setCastTo(Type castTo) {
+    this.castTo=castTo;
+  }
+
+  private Type castTo;
 
   public String getOp() {
     return op;

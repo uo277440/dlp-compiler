@@ -40,4 +40,9 @@ public class CodeGenTest {
   void codeInput() {
     runCompiler("examples/codegeneration/complete/input.xana");
   }
+
+  @Test
+  void codePr() {
+    runCompiler("examples/codegeneration/prueba.xana");
+  }
 }
