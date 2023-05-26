@@ -300,13 +300,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
   @Override
   public VoidType visit(Return rt, Type param) {
     rt.getExpression().accept(this, param);
-    if (rt.getExpression().getType().getClass() != (param.getClass())) {
+    if (rt.getExpression().getType().promotesTo(param)==null) {
       ErrorManager.getInstance()
           .addError(
               new Error(
                   rt.getExpression().getLine(),
                   rt.getExpression().getColumn(),
                   ErrorReason.INVALID_RETURN_TYPE));
+      return null;
     }
     return null;
   }

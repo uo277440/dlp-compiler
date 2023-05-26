@@ -1,5 +1,6 @@
 package es.uniovi.dlp.visitor.codegeneration;
 
+import es.uniovi.dlp.ast.expression.Expression;
 import es.uniovi.dlp.ast.expression.Invocation;
 import es.uniovi.dlp.ast.program.Definition;
 import es.uniovi.dlp.ast.program.FunctionDefinition;
@@ -51,7 +52,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
             in{ex.type}
             store{ex.type}
      */
-    i.getBody().accept(valueV, null);
+    i.getBody().accept(valueV, param);
     cg.out(i.getBody().getType());
     return null;
   }
@@ -99,7 +100,11 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
   @Override
   public VoidType visit(Invocation i, FunctionDefinition param) {
     // i.accept(valueV, null);
-    i.getArguments().forEach(arg -> arg.accept(valueV, null));
+    //i.getArguments().forEach(arg -> arg.accept(valueV, null));
+    for(int j=0;j<i.getArguments().size();j++){
+      i.getArguments().get(j).accept(valueV,null);
+      cg.cast(i.getArguments().get(j).getType(),((FunctionType)param.getType()).getParams().get(j).getType());
+    }
     cg.call(i.getName().getName());
     if (i.getType() instanceof VoidType) return null;
     cg.pop(i.getType());
@@ -114,8 +119,9 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
             ret
      */
     r.getExpression().accept(valueV, null);
+    cg.cast(r.getExpression().getType(),((FunctionType)param.getType()).getReturnType());
     cg.ret(
-        r.getExpression().getType().getNumberOfBytes(),
+            ((FunctionType)param.getType()).getReturnType().getNumberOfBytes(),
         -param.getLocalsSize(),
         ((FunctionType) param.getType()).getParamsSize());
 

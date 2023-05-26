@@ -510,7 +510,7 @@ label6:
 	' Body of the while statement
 
 #line	74
-	push	bp
+    push	bp
 	pushi	-4
 	addi
 	pushi	0

@@ -34,14 +34,18 @@ public class Compiler {
   }
 
   public void run() throws IOException {
+
     ErrorManager.getInstance().clearErrors();
     program = parse(filename);
+
 
     assignScope();
     assignType();
 
     checkErrors();
+
     if (!ErrorManager.getInstance().hasErrors()) assignOffsets();
+    checkErrors();
     if (!ErrorManager.getInstance()
         .hasErrors()) // no hará la generación de código si hay errores en las anteriores fases
     execute();
@@ -53,9 +57,10 @@ public class Compiler {
   }
 
   private void checkErrors() {
-    if (!reportErrors) return;
+
 
     ErrorManager errorManager = ErrorManager.getInstance();
+    if(reportErrors)
     if (errorManager.hasErrors()) {
       errorManager.getErrors().forEach(System.err::println);
       System.exit(-1);

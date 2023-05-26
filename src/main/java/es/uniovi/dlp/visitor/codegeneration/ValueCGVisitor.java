@@ -1,11 +1,13 @@
 package es.uniovi.dlp.visitor.codegeneration;
 
 import es.uniovi.dlp.ast.expression.*;
+import es.uniovi.dlp.ast.program.FunctionDefinition;
+import es.uniovi.dlp.ast.type.FunctionType;
 import es.uniovi.dlp.ast.type.Type;
 import es.uniovi.dlp.ast.type.VoidType;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
-public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
+public class ValueCGVisitor extends AbstractVisitor<Type, FunctionDefinition> {
   private final CodeGenerator cg;
 
   public void setAddressCGVisitor(AddressCGVisitor addressCGVisitor) {
@@ -20,7 +22,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   }
 
   @Override
-  public VoidType visit(Not n, Type param) {
+  public VoidType visit(Not n, FunctionDefinition param) {
 
     n.getExpression().accept(this, param);
     cg.not();
@@ -28,7 +30,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   }
 
   @Override
-  public VoidType visit(UnaryMinus n, Type param) {
+  public VoidType visit(UnaryMinus n, FunctionDefinition param) {
     cg.push(n.getType(),0);
     n.getExpression().accept(this, param);
     cg.sub(n.getType());
@@ -36,14 +38,14 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   }
 
   @Override
-  public VoidType visit(Id i, Type param) {
+  public VoidType visit(Id i, FunctionDefinition param) {
     i.accept(addressCGVisitor, null);
     cg.load(i.getType());
     return null;
   }
 
   @Override
-  public VoidType visit(LogicOperation l, Type param) {
+  public VoidType visit(LogicOperation l, FunctionDefinition param) {
     l.getLeftExpression().accept(this, param);
     l.getRightExpression().accept(this, param);
     switch (l.getOp()) {
@@ -60,14 +62,18 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   }
 
   @Override
-  public VoidType visit(Invocation i, Type param) {
-    i.getArguments().forEach(a -> a.accept(this, param));
+  public VoidType visit(Invocation i, FunctionDefinition param) {
+    //i.getArguments().forEach(a -> a.accept(this, param));
+    for(int j=0;j<i.getArguments().size();j++){
+      i.getArguments().get(j).accept(this,null);
+      cg.cast(i.getArguments().get(j).getType(),((FunctionType)i.getName().getDefinition().getType()).getParams().get(j).getType());
+    }
     cg.call(i.getName().getName());
     return null;
   }
 
   @Override
-  public VoidType visit(ComparisonOperation c, Type param) {
+  public VoidType visit(ComparisonOperation c, FunctionDefinition param) {
     c.getLeftExpression().accept(this, param);
     cg.cast(c.getLeftExpression().getType(),c.getCastTo());
     c.getRightExpression().accept(this, param);
@@ -99,39 +105,39 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   }
 
   @Override
-  public VoidType visit(CharConstant c, Type param) {
+  public VoidType visit(CharConstant c, FunctionDefinition param) {
     cg.push(c.getType(), c.getValue());
     return null;
   }
 
   @Override
-  public VoidType visit(IntLiteral i, Type param) {
+  public VoidType visit(IntLiteral i, FunctionDefinition param) {
     cg.push(i.getType(), i.getValue());
     return null;
   }
 
   @Override
-  public VoidType visit(RealConstant r, Type param) {
+  public VoidType visit(RealConstant r, FunctionDefinition param) {
     cg.push(r.getType(), r.getValue());
     return null;
   }
 
   @Override
-  public VoidType visit(FieldAccess f, Type param) {
+  public VoidType visit(FieldAccess f, FunctionDefinition param) {
     f.accept(addressCGVisitor, null);
     cg.load(f.getType());
     return null;
   }
 
   @Override
-  public VoidType visit(Cast c, Type param) {
+  public VoidType visit(Cast c, FunctionDefinition param) {
     c.getLeft().accept(this, param);
     cg.cast(c.getLeft().getType(), c.getCastToType());
     return null;
   }
 
   @Override
-  public VoidType visit(ArithmeticOperation a, Type param) {
+  public VoidType visit(ArithmeticOperation a, FunctionDefinition param) {
     a.getLeftExpression().accept(this, param);
     cg.cast(a.getLeftExpression().getType(), a.getType());
     a.getRightExpression().accept(this, param);
@@ -159,7 +165,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
   }
 
   @Override
-  public VoidType visit(Indexing i, Type param) {
+  public VoidType visit(Indexing i, FunctionDefinition param) {
     i.accept(addressCGVisitor, null);
     cg.load(i.getType());
     return null;

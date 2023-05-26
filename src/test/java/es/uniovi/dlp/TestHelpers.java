@@ -102,4 +102,12 @@ public class TestHelpers {
       fail(e);
     }
   }
+  public static void runCompilerWithErrors(String file) {
+    try {
+      var compiler = new Compiler(file);
+      compiler.run();
+    } catch (IOException e) {
+      fail(e);
+    }
+  }
 }

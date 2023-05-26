@@ -17,8 +17,11 @@ public class Char extends AbstractType {
 
   @Override
   public Type arithmetic(Type type) {
-    if (type instanceof Char) {
+    if (type instanceof Char || type instanceof  Int) {
       return Int.getInstance();
+    }
+    if(type instanceof DoubleType){
+      return DoubleType.getInstance();
     }
     return null;
   }

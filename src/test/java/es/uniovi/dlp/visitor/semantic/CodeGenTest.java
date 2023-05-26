@@ -1,6 +1,7 @@
 package es.uniovi.dlp.visitor.semantic;
 
 import static es.uniovi.dlp.TestHelpers.runCompiler;
+import static es.uniovi.dlp.TestHelpers.runCompilerWithErrors;
 
 import org.junit.jupiter.api.Test;
 
@@ -44,5 +45,13 @@ public class CodeGenTest {
   @Test
   void codePr() {
     runCompiler("examples/codegeneration/prueba.xana");
+  }
+  @Test
+  void codeExamen() {
+    runCompiler("examples/codegeneration/examen.xana");
+  }
+  @Test
+  void codeExamen2() {
+    runCompilerWithErrors("examples/codegeneration/examen2.xana");
   }
 }
