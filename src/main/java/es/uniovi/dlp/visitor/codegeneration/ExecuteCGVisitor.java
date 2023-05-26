@@ -103,7 +103,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, FunctionDefinition> 
     //i.getArguments().forEach(arg -> arg.accept(valueV, null));
     for(int j=0;j<i.getArguments().size();j++){
       i.getArguments().get(j).accept(valueV,null);
-      cg.cast(i.getArguments().get(j).getType(),((FunctionType)param.getType()).getParams().get(j).getType());
+      cg.cast(i.getArguments().get(j).getType(),((FunctionType)i.getName().getDefinition().getType()).getParams().get(j).getType());
     }
     cg.call(i.getName().getName());
     if (i.getType() instanceof VoidType) return null;
